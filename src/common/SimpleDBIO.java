@@ -1,6 +1,13 @@
 package common;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -13,7 +20,7 @@ public class SimpleDBIO
 {
 	private static final String DELIMITER = Messages.getString("SimpleDBIO.0"); //$NON-NLS-1$
 
-	public static void addColumnToDB(SimpleDB p_db, String p_columnName, String p_defaultValue)
+	public static void addColumnToDB(final SimpleDB p_db, final String p_columnName, final String p_defaultValue)
 	{
 		p_db.addHeaderElement(p_columnName);
 
@@ -24,20 +31,22 @@ public class SimpleDBIO
 	}
 
 	/**
-	 * @param p_file
-	 * @param p_hasHeader
-	 * @return A SimpleDB object constructed from this file
+	 * @param  p_file
+	 * @param  p_hasHeader
+	 *
+	 * @return             A SimpleDB object constructed from this file
 	 */
 	public static SimpleDB loadFromFile(final File p_file, final boolean p_hasHeader)
 	{
-		final ArrayList<ArrayList<SimpleDBCell>> db        = new ArrayList<>();
-		TreeMap<String, Integer>                 columnMap = null;
-		ArrayList<String>                        header    = null;
+		final ArrayList<ArrayList<SimpleDBCell>> db = new ArrayList<>();
+		TreeMap<String, Integer> columnMap = null;
+		ArrayList<String> header = null;
 
 		if (p_file != null && p_file.exists())
 		{
-			try (BufferedReader reader = new BufferedReader(
-				new InputStreamReader(new FileInputStream(p_file), Messages.getString("SimpleDBIO.1")))) //$NON-NLS-1$
+			try (
+				BufferedReader reader = new BufferedReader(
+					new InputStreamReader(new FileInputStream(p_file), Messages.getString("SimpleDBIO.1")))) //$NON-NLS-1$
 			{
 				boolean first = true;
 				while (true)
@@ -52,7 +61,7 @@ public class SimpleDBIO
 					if (p_hasHeader && first)
 					{
 						columnMap = new TreeMap<>();
-						header    = new ArrayList<>();
+						header = new ArrayList<>();
 
 						for (int i = 0; i < bits.length; i++)
 						{
@@ -82,7 +91,7 @@ public class SimpleDBIO
 		return new SimpleDB(db, columnMap, header);
 	}
 
-	public static void main(String[] p_args)
+	public static void main(final String[] p_args)
 	{
 		// unit test goes here
 	}
@@ -105,11 +114,12 @@ public class SimpleDBIO
 			}
 		}
 
-		try (final BufferedWriter writer = new BufferedWriter(
-			new OutputStreamWriter(new FileOutputStream(p_file), Messages.getString("SimpleDBIO.2")))) //$NON-NLS-1$
+		try (
+			final BufferedWriter writer = new BufferedWriter(
+				new OutputStreamWriter(new FileOutputStream(p_file), Messages.getString("SimpleDBIO.2")))) //$NON-NLS-1$
 		{
 			final int numColumns = p_db.numColumns();
-			final int numRows    = p_db.numRows();
+			final int numRows = p_db.numRows();
 
 			if (p_db.hasHeader())
 			{

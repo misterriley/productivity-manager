@@ -7,13 +7,13 @@ import java.util.Properties;
 
 public class PropertiesManager
 {
-	private static final String PROPERTIES_FILE       = Messages.getString("PropertiesManager.0"); //$NON-NLS-1$
+	private static final String PROPERTIES_FILE = Messages.getString("PropertiesManager.0"); //$NON-NLS-1$
 
-	public static final String  SAVE_LOCATION_KEY     = Messages.getString("PropertiesManager.1"); //$NON-NLS-1$
+	public static final String SAVE_LOCATION_KEY = Messages.getString("PropertiesManager.1"); //$NON-NLS-1$
 
 	private static final String DEFAULT_SAVE_LOCATION = Messages.getString("PropertiesManager.2"); //$NON-NLS-1$
 
-	private static String getDefaultProperty(String p_propertyName)
+	private static String getDefaultProperty(final String p_propertyName)
 	{
 		if (p_propertyName.equals(SAVE_LOCATION_KEY))
 		{
@@ -38,10 +38,10 @@ public class PropertiesManager
 		}
 	}
 
-	public String getProperty(String p_propertyName)
+	public String getProperty(final String p_propertyName)
 	{
 		final String defaultProperty = getDefaultProperty(p_propertyName);
-		String       ret             = m_props.getProperty(p_propertyName);
+		String ret = m_props.getProperty(p_propertyName);
 		if (ret == null)
 		{
 			ret = defaultProperty;

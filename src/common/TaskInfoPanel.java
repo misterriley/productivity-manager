@@ -34,17 +34,17 @@ public class TaskInfoPanel extends JPanel
 	private JDatePicker						m_dueDatePicker;
 	private JDatePicker						m_lastCompletionDatePicker;
 
-	private JLabel							m_timerResetsLabel;
+	private JLabel m_timerResetsLabel;
 
-	private final TaskManagementPanel		m_taskManagementPanel;
-	private JLabel							m_lastCompletionDateLabel;
-	private JCheckBox						m_childrenAreOrderedCheckbox;
-	private JLabel							m_currentChildTaskLabel;
-	private JTextField						m_currentChildTaskTextField;
+	private final TaskManagementPanel	m_taskManagementPanel;
+	private JLabel						m_lastCompletionDateLabel;
+	private JCheckBox					m_childrenAreOrderedCheckbox;
+	private JLabel						m_currentChildTaskLabel;
+	private JTextField					m_currentChildTaskTextField;
 
-	private Task							m_currentlyDisplayedTask;
+	private Task m_currentlyDisplayedTask;
 
-	public TaskInfoPanel(TaskManagementPanel p_taskManagementPanel)
+	public TaskInfoPanel(final TaskManagementPanel p_taskManagementPanel)
 	{
 		super(new GridLayout(5, 1));
 
@@ -55,6 +55,151 @@ public class TaskInfoPanel extends JPanel
 		buildAndAddRepeatPanel();
 		buildAndAddPriorityPanel();
 		buildAndAddSavePanel();
+	}
+
+	public void refreshCurrentTask()
+	{
+		setCurrentTask(m_currentlyDisplayedTask);
+	}
+
+	public void saveUIToCurrentTask()
+	{
+		saveUIToTask(m_currentlyDisplayedTask);
+	}
+
+	public void saveUIToTask(final Task p_task)
+	{
+		if (p_task == null)
+		{
+			return;
+		}
+
+		p_task.setDescription(m_descriptionField.getText());
+		p_task.setDueDate(m_dueDatePicker.getModel().getDay());
+		p_task.setDueMonth(m_dueDatePicker.getModel().getMonthButWrong() + 1);
+		p_task.setDueYear(m_dueDatePicker.getModel().getYear());
+		p_task.setHasDueDate(m_hasDueDateCheckbox.isSelected());
+		p_task.setHasOpeningDate(m_hasOpenDateCheckbox.isSelected());
+		p_task.setOpeningDate(m_openDatePicker.getModel().getDay());
+		p_task.setOpeningMonth(m_openDatePicker.getModel().getMonthButWrong() + 1);
+		p_task.setOpeningYear(m_openDatePicker.getModel().getYear());
+		p_task.setPriority(m_prioritySlider.getValue());
+		p_task.setRepeatingTask(m_repeatCheckbox.isSelected());
+
+		p_task.setRepeatPeriodType((RepeatPeriodType) m_repeatPeriodComboBox.getSelectedItem());
+		p_task.setRepeatRestartType((RepeatRestartType) m_repeatRestartComboBox.getSelectedItem());
+		p_task.setChildrenAreOrdered(m_childrenAreOrderedCheckbox.isSelected());
+
+		// TODO - figure out what to do with "last completion date"
+
+		try
+		{
+			final String text = m_repeatPeriodField.getText();
+			if (!text.equals(Messages.getString("TaskInfoPanel.14"))) //$NON-NLS-1$
+			{
+				p_task.setRepeatPeriodCount(Integer.parseInt(text));
+			}
+		}
+		catch (final NumberFormatException ioex)
+		{
+			JOptionPane.showMessageDialog(this, Messages.getString("TaskInfoPanel.15")); //$NON-NLS-1$
+		}
+
+		if (p_task.isRepeatingTask() && (!p_task.hasDueDate() || !p_task.hasOpeningDate()))
+		{
+			JOptionPane
+				.showMessageDialog(
+					this,
+					Messages.getString("TaskInfoPanel.16"), //$NON-NLS-1$
+					Messages.getString("TaskInfoPanel.17"), //$NON-NLS-1$
+					JOptionPane.ERROR_MESSAGE);
+		}
+
+		PMMainController.saveModel();
+		m_taskManagementPanel.getTaskTree().refresh(p_task.getNode());
+	}
+
+	public void setCurrentTask(final Task p_currentTask)
+	{
+		m_currentlyDisplayedTask = p_currentTask;
+
+		if (p_currentTask == null)
+		{
+			m_repeatCheckbox.setSelected(false);
+			m_hasDueDateCheckbox.setSelected(false);
+			m_hasOpenDateCheckbox.setSelected(false);
+			m_descriptionField.setText(Messages.getString("TaskInfoPanel.19")); //$NON-NLS-1$
+			m_repeatPeriodField.setText(Messages.getString("TaskInfoPanel.20")); //$NON-NLS-1$
+			m_prioritySlider.setValue(Constants.DEFAULT_TASK_PRIORITY);
+			m_openDatePicker.clearDatePanel();
+			m_dueDatePicker.clearDatePanel();
+			m_childrenAreOrderedCheckbox.setSelected(false);
+			m_childrenAreOrderedCheckbox.setEnabled(false);
+			setChildTaskUIElementsEnabled(false);
+		}
+		else
+		{
+			m_repeatCheckbox.setSelected(p_currentTask.isRepeatingTask());
+
+			if (p_currentTask.isRepeatingTask())
+			{
+				m_repeatPeriodComboBox.setSelectedItem(p_currentTask.getRepeatPeriodType());
+				m_repeatRestartComboBox.setSelectedItem(p_currentTask.getRepeatRestartType());
+				m_repeatPeriodField.setText(String.valueOf(p_currentTask.getRepeatPeriodCount()));
+			}
+			else
+			{
+				m_repeatPeriodField.setText(Messages.getString("TaskInfoPanel.21")); //$NON-NLS-1$
+			}
+
+			m_hasDueDateCheckbox.setSelected(p_currentTask.hasDueDate());
+
+			if (p_currentTask.hasDueDate())
+			{
+				m_dueDatePicker
+					.setDateExternallyButWrong(
+						p_currentTask.getDueYear(),
+						p_currentTask.getDueMonth() - 1,
+						p_currentTask.getDueDate());
+			}
+			else
+			{
+				m_dueDatePicker.clearDatePanel();
+			}
+
+			m_hasOpenDateCheckbox.setSelected(p_currentTask.hasOpeningDate());
+
+			if (p_currentTask.hasOpeningDate())
+			{
+				m_openDatePicker
+					.setDateExternallyButWrong(
+						p_currentTask.getOpeningYear(),
+						p_currentTask.getOpeningMonth() - 1,
+						p_currentTask.getOpeningDate());
+			}
+			else
+			{
+				m_openDatePicker.clearDatePanel();
+			}
+
+			m_descriptionField.setText(p_currentTask.getDescription());
+			m_prioritySlider.setValue(p_currentTask.getPriority());
+
+			if (p_currentTask.getNode().getChildCount() == 0)
+			{
+				m_childrenAreOrderedCheckbox.setEnabled(false);
+			}
+			else
+			{
+				m_childrenAreOrderedCheckbox.setEnabled(true);
+			}
+
+			m_childrenAreOrderedCheckbox.setSelected(p_currentTask.childrenAreOrdered());
+			setChildTaskUIElementsEnabled(p_currentTask.childrenAreOrdered());
+			fillLiveChildTaskField(p_currentTask);
+
+			m_taskManagementPanel.getTaskTree().setSelectedTask(m_currentlyDisplayedTask);
+		}
 	}
 
 	private void buildAndAddDatePanel()
@@ -227,149 +372,13 @@ public class TaskInfoPanel extends JPanel
 		}
 	}
 
-	public void refreshCurrentTask()
-	{
-		setCurrentTask(m_currentlyDisplayedTask);
-	}
-
-	public void saveUIToCurrentTask()
-	{
-		saveUIToTask(m_currentlyDisplayedTask);
-	}
-
-	public void saveUIToTask(Task p_task)
-	{
-		if (p_task == null)
-		{
-			return;
-		}
-
-		p_task.setDescription(m_descriptionField.getText());
-		p_task.setDueDate(m_dueDatePicker.getModel().getDay());
-		p_task.setDueMonth(m_dueDatePicker.getModel().getMonthButWrong() + 1);
-		p_task.setDueYear(m_dueDatePicker.getModel().getYear());
-		p_task.setHasDueDate(m_hasDueDateCheckbox.isSelected());
-		p_task.setHasOpeningDate(m_hasOpenDateCheckbox.isSelected());
-		p_task.setOpeningDate(m_openDatePicker.getModel().getDay());
-		p_task.setOpeningMonth(m_openDatePicker.getModel().getMonthButWrong() + 1);
-		p_task.setOpeningYear(m_openDatePicker.getModel().getYear());
-		p_task.setPriority(m_prioritySlider.getValue());
-		p_task.setRepeatingTask(m_repeatCheckbox.isSelected());
-
-		p_task.setRepeatPeriodType((RepeatPeriodType)m_repeatPeriodComboBox.getSelectedItem());
-		p_task.setRepeatRestartType((RepeatRestartType)m_repeatRestartComboBox.getSelectedItem());
-		p_task.setChildrenAreOrdered(m_childrenAreOrderedCheckbox.isSelected());
-
-		// TODO - figure out what to do with "last completion date"
-
-		try
-		{
-			final String text = m_repeatPeriodField.getText();
-			if (!text.equals(Messages.getString("TaskInfoPanel.14"))) //$NON-NLS-1$
-			{
-				p_task.setRepeatPeriodCount(Integer.parseInt(text));
-			}
-		}
-		catch (final NumberFormatException ioex)
-		{
-			JOptionPane.showMessageDialog(this, Messages.getString("TaskInfoPanel.15")); //$NON-NLS-1$
-		}
-
-		if (p_task.isRepeatingTask() && (!p_task.hasDueDate() || !p_task.hasOpeningDate()))
-		{
-			JOptionPane.showMessageDialog(this,
-					Messages.getString("TaskInfoPanel.16"), //$NON-NLS-1$
-					Messages.getString("TaskInfoPanel.17"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
-		}
-
-		PMMainController.saveModel();
-		m_taskManagementPanel.getTaskTree().refresh(p_task.getNode());
-	}
-
-	private void setChildTaskUIElementsEnabled(boolean p_selected)
+	private void setChildTaskUIElementsEnabled(final boolean p_selected)
 	{
 		m_currentChildTaskLabel.setEnabled(p_selected);
 		m_currentChildTaskTextField.setEnabled(p_selected);
 		if (p_selected == false)
 		{
 			m_currentChildTaskTextField.setText(Messages.getString("TaskInfoPanel.18")); //$NON-NLS-1$
-		}
-	}
-
-	public void setCurrentTask(Task p_currentTask)
-	{
-		m_currentlyDisplayedTask = p_currentTask;
-
-		if (p_currentTask == null)
-		{
-			m_repeatCheckbox.setSelected(false);
-			m_hasDueDateCheckbox.setSelected(false);
-			m_hasOpenDateCheckbox.setSelected(false);
-			m_descriptionField.setText(Messages.getString("TaskInfoPanel.19")); //$NON-NLS-1$
-			m_repeatPeriodField.setText(Messages.getString("TaskInfoPanel.20")); //$NON-NLS-1$
-			m_prioritySlider.setValue(Constants.DEFAULT_TASK_PRIORITY);
-			m_openDatePicker.clearDatePanel();
-			m_dueDatePicker.clearDatePanel();
-			m_childrenAreOrderedCheckbox.setSelected(false);
-			m_childrenAreOrderedCheckbox.setEnabled(false);
-			setChildTaskUIElementsEnabled(false);
-		}
-		else
-		{
-			m_repeatCheckbox.setSelected(p_currentTask.isRepeatingTask());
-
-			if (p_currentTask.isRepeatingTask())
-			{
-				m_repeatPeriodComboBox.setSelectedItem(p_currentTask.getRepeatPeriodType());
-				m_repeatRestartComboBox.setSelectedItem(p_currentTask.getRepeatRestartType());
-				m_repeatPeriodField.setText(String.valueOf(p_currentTask.getRepeatPeriodCount()));
-			}
-			else
-			{
-				m_repeatPeriodField.setText(Messages.getString("TaskInfoPanel.21")); //$NON-NLS-1$
-			}
-
-			m_hasDueDateCheckbox.setSelected(p_currentTask.hasDueDate());
-
-			if (p_currentTask.hasDueDate())
-			{
-				m_dueDatePicker.setDateExternallyButWrong(p_currentTask.getDueYear(), p_currentTask.getDueMonth() - 1,
-						p_currentTask.getDueDate());
-			}
-			else
-			{
-				m_dueDatePicker.clearDatePanel();
-			}
-
-			m_hasOpenDateCheckbox.setSelected(p_currentTask.hasOpeningDate());
-
-			if (p_currentTask.hasOpeningDate())
-			{
-				m_openDatePicker.setDateExternallyButWrong(p_currentTask.getOpeningYear(),
-						p_currentTask.getOpeningMonth() - 1, p_currentTask.getOpeningDate());
-			}
-			else
-			{
-				m_openDatePicker.clearDatePanel();
-			}
-
-			m_descriptionField.setText(p_currentTask.getDescription());
-			m_prioritySlider.setValue(p_currentTask.getPriority());
-
-			if (p_currentTask.getNode().getChildCount() == 0)
-			{
-				m_childrenAreOrderedCheckbox.setEnabled(false);
-			}
-			else
-			{
-				m_childrenAreOrderedCheckbox.setEnabled(true);
-			}
-
-			m_childrenAreOrderedCheckbox.setSelected(p_currentTask.childrenAreOrdered());
-			setChildTaskUIElementsEnabled(p_currentTask.childrenAreOrdered());
-			fillLiveChildTaskField(p_currentTask);
-
-			m_taskManagementPanel.getTaskTree().setSelectedTask(m_currentlyDisplayedTask);
 		}
 	}
 

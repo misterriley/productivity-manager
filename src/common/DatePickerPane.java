@@ -14,14 +14,8 @@ import datepicker.JDatePicker;
 
 public class DatePickerPane
 {
-	private JDatePicker m_picker;
-	private boolean     m_isWindowClosed;
-
-	private synchronized boolean isWindowClosed()
-	{
-		// TODO Auto-generated method stub
-		return m_isWindowClosed;
-	}
+	private JDatePicker	m_picker;
+	private boolean		m_isWindowClosed;
 
 	public DateModel<?> response()
 	{
@@ -43,11 +37,6 @@ public class DatePickerPane
 		}
 
 		return m_picker.getModel();
-	}
-
-	synchronized void setIsWindowClosed(boolean p_isWindowClosed)
-	{
-		m_isWindowClosed = p_isWindowClosed;
 	}
 
 	public void showPanel()
@@ -80,51 +69,62 @@ public class DatePickerPane
 		{
 
 			@Override
-			public void windowActivated(WindowEvent p_arg0)
+			public void windowActivated(final WindowEvent p_arg0)
 			{
 				// nothing
 			}
 
 			@Override
-			public void windowClosed(WindowEvent p_arg0)
+			public void windowClosed(final WindowEvent p_arg0)
 			{
 				setIsWindowClosed(true);
 			}
 
 			@Override
-			public void windowClosing(WindowEvent p_arg0)
+			public void windowClosing(final WindowEvent p_arg0)
 			{
 				// nothing
 
 			}
 
 			@Override
-			public void windowDeactivated(WindowEvent p_arg0)
+			public void windowDeactivated(final WindowEvent p_arg0)
 			{
 				// nothing
 
 			}
 
 			@Override
-			public void windowDeiconified(WindowEvent p_arg0)
+			public void windowDeiconified(final WindowEvent p_arg0)
 			{
 				// nothing
 
 			}
 
 			@Override
-			public void windowIconified(WindowEvent p_arg0)
+			public void windowIconified(final WindowEvent p_arg0)
 			{
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
-			public void windowOpened(WindowEvent p_arg0)
+			public void windowOpened(final WindowEvent p_arg0)
 			{
 				// TODO Auto-generated method stub
 
 			}
 		});
+	}
+
+	synchronized void setIsWindowClosed(final boolean p_isWindowClosed)
+	{
+		m_isWindowClosed = p_isWindowClosed;
+	}
+
+	private synchronized boolean isWindowClosed()
+	{
+		// TODO Auto-generated method stub
+		return m_isWindowClosed;
 	}
 }

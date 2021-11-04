@@ -19,7 +19,7 @@ public class TaskManagementPanel extends JSplitPane
 	private final TaskInfoPanel	m_taskInfoPanel;
 	private final MainModel		m_mainModel;
 
-	public TaskManagementPanel(MainModel p_mainModel)
+	public TaskManagementPanel(final MainModel p_mainModel)
 	{
 		m_mainModel = p_mainModel;
 
@@ -51,24 +51,6 @@ public class TaskManagementPanel extends JSplitPane
 		deleteTaskButton.addActionListener(p_arg0 -> deleteCurrentTask());
 	}
 
-	private void deleteCurrentTask()
-	{
-		if (!m_taskTree.canCurrentNodeBeDeleted())
-		{
-			return;
-		}
-
-		final Task currentTask = m_taskTree.getCurrentTask();
-		final String desc = currentTask.getDescription();
-		final int choice = JOptionPane.showConfirmDialog(this,
-				Messages.getString("TaskManagementPanel.4") + desc + Messages.getString("TaskManagementPanel.5")); //$NON-NLS-1$ //$NON-NLS-2$
-		if (choice == JOptionPane.YES_OPTION)
-		{
-			m_taskTree.deleteCurrentTask();
-		}
-		m_mainModel.getTasks().remove(currentTask.getID());
-	}
-
 	public MainModel getMainModel()
 	{
 		return m_mainModel;
@@ -84,36 +66,7 @@ public class TaskManagementPanel extends JSplitPane
 		return m_taskTree;
 	}
 
-	private void showNewSubtask()
-	{
-		final DefaultMutableTreeNode selectedNode = m_taskTree.getSelectedNode();
-		if (selectedNode == null || selectedNode.getUserObject() instanceof String)
-		{
-			JOptionPane.showMessageDialog(this, Messages.getString("TaskManagementPanel.6")); //$NON-NLS-1$
-		}
-		else
-		{
-			final Task parentTask = (Task)selectedNode.getUserObject();
-			if (parentTask.isCompleted())
-			{
-				JOptionPane.showMessageDialog(this, Messages.getString("TaskManagementPanel.7")); //$NON-NLS-1$
-			}
-			else
-			{
-				final Task childTask = new Task(m_mainModel.getNextTaskID(), parentTask.getID(), false, Constants.NO_ID,
-						parentTask.getDescription() + Messages.getString("TaskManagementPanel.8"), parentTask.getPriority(), parentTask.hasOpeningDate(), //$NON-NLS-1$
-						parentTask.getOpeningYear(), parentTask.getOpeningMonth(), parentTask.getOpeningDate(),
-						parentTask.hasDueDate(), parentTask.getDueYear(), parentTask.getDueMonth(),
-						parentTask.getDueDate(), parentTask.isRepeatingTask(), parentTask.getRepeatPeriodCount(),
-						parentTask.getRepeatPeriodType(), parentTask.getRepeatRestartType(), false, 0, 0, 0);
-
-				m_taskTree.addAndHighlightNode(selectedNode, childTask);
-				m_mainModel.addTask(childTask);
-			}
-		}
-	}
-
-	public void showNewTask(boolean p_topLevel)
+	public void showNewTask(final boolean p_topLevel)
 	{
 		final LocalDate now = LocalDate.now();
 
@@ -125,8 +78,8 @@ public class TaskManagementPanel extends JSplitPane
 		{
 			if (selected.getUserObject() instanceof Task)
 			{
-				parent = (DefaultMutableTreeNode)selected.getParent();
-				parentID = ((Task)parent.getUserObject()).getID();
+				parent = (DefaultMutableTreeNode) selected.getParent();
+				parentID = ((Task) parent.getUserObject()).getID();
 			}
 			else
 			{
@@ -135,12 +88,96 @@ public class TaskManagementPanel extends JSplitPane
 			}
 		}
 
-		final Task createdTask = new Task(m_mainModel.getNextTaskID(), parentID, false, Constants.NO_ID,
-				Constants.DEFAULT_DESCRIPTION, Constants.DEFAULT_TASK_PRIORITY, false, now.getYear(),
-				now.getMonthValue(), now.getDayOfMonth(), false, now.getYear(), now.getMonthValue(),
-				now.getDayOfMonth(), false, 1, RepeatPeriodType.DAYS, RepeatRestartType.ON_DUE_DATE, false, 0, 0, 0);
+		final Task createdTask = new Task(
+			m_mainModel.getNextTaskID(),
+			parentID,
+			false,
+			Constants.NO_ID,
+			Constants.DEFAULT_DESCRIPTION,
+			Constants.DEFAULT_TASK_PRIORITY,
+			false,
+			now.getYear(),
+			now.getMonthValue(),
+			now.getDayOfMonth(),
+			false,
+			now.getYear(),
+			now.getMonthValue(),
+			now.getDayOfMonth(),
+			false,
+			1,
+			RepeatPeriodType.DAYS,
+			RepeatRestartType.ON_DUE_DATE,
+			false,
+			0,
+			0,
+			0);
 
 		m_taskTree.addAndHighlightNode(createdTask, parent);
 		m_mainModel.addTask(createdTask);
+	}
+
+	private void deleteCurrentTask()
+	{
+		if (!m_taskTree.canCurrentNodeBeDeleted())
+		{
+			return;
+		}
+
+		final Task currentTask = m_taskTree.getCurrentTask();
+		final String desc = currentTask.getDescription();
+		final int choice = JOptionPane
+			.showConfirmDialog(
+				this,
+				Messages.getString("TaskManagementPanel.4") + desc + Messages.getString("TaskManagementPanel.5")); //$NON-NLS-1$ //$NON-NLS-2$
+		if (choice == JOptionPane.YES_OPTION)
+		{
+			m_taskTree.deleteCurrentTask();
+		}
+		m_mainModel.getTasks().remove(currentTask.getID());
+	}
+
+	private void showNewSubtask()
+	{
+		final DefaultMutableTreeNode selectedNode = m_taskTree.getSelectedNode();
+		if (selectedNode == null || selectedNode.getUserObject() instanceof String)
+		{
+			JOptionPane.showMessageDialog(this, Messages.getString("TaskManagementPanel.6")); //$NON-NLS-1$
+		}
+		else
+		{
+			final Task parentTask = (Task) selectedNode.getUserObject();
+			if (parentTask.isCompleted())
+			{
+				JOptionPane.showMessageDialog(this, Messages.getString("TaskManagementPanel.7")); //$NON-NLS-1$
+			}
+			else
+			{
+				final Task childTask = new Task(
+					m_mainModel.getNextTaskID(),
+					parentTask.getID(),
+					false,
+					Constants.NO_ID,
+					parentTask.getDescription() + Messages.getString("TaskManagementPanel.8"), //$NON-NLS-1$
+					parentTask.getPriority(),
+					parentTask.hasOpeningDate(),parentTask.getOpeningYear(),
+					parentTask.getOpeningMonth(),
+					parentTask.getOpeningDate(),
+					parentTask.hasDueDate(),
+					parentTask.getDueYear(),
+					parentTask.getDueMonth(),
+					parentTask.getDueDate(),
+					parentTask.isRepeatingTask(),
+					parentTask.getRepeatPeriodCount(),
+					parentTask.getRepeatPeriodType(),
+					parentTask.getRepeatRestartType(),
+					false,
+					0,
+					0,
+					0);
+
+				m_taskTree.addAndHighlightNode(selectedNode, childTask);
+				m_mainModel.addTask(childTask);
+			}
+		}
 	}
 }

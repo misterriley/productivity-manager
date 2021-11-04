@@ -6,42 +6,38 @@ import java.util.TreeMap;
 
 public class TaskIO
 {
-	private static final String			ID_COLUMN_NAME						= Messages.getString("TaskIO.0"); //$NON-NLS-1$
-	private static final String			PARENT_ID_COLUMN_NAME				= Messages.getString("TaskIO.1"); //$NON-NLS-1$
-	private static final String			CHILDREN_ARE_ORDERED_COLUMN_NAME	= Messages.getString("TaskIO.2"); //$NON-NLS-1$
-	private static final String			LIVE_CHILD_ID_COLUMN_NAME			= Messages.getString("TaskIO.3"); //$NON-NLS-1$
-	private static final String			DESC_COLUMN_NAME					= Messages.getString("TaskIO.4"); //$NON-NLS-1$
-	private static final String			PRIORITY_COLUMN_NAME				= Messages.getString("TaskIO.5"); //$NON-NLS-1$
-	private static final String			HAS_OPENING_DATE_COLUMN_NAME		= Messages.getString("TaskIO.6"); //$NON-NLS-1$
-	private static final String			OPENING_YEAR_COLUMN_NAME			= Messages.getString("TaskIO.7"); //$NON-NLS-1$
-	private static final String			OPENING_MONTH_COLUMN_NAME			= Messages.getString("TaskIO.8"); //$NON-NLS-1$
-	private static final String			OPENING_DATE_COLUMN_NAME			= Messages.getString("TaskIO.9"); //$NON-NLS-1$
-	private static final String			HAS_DUE_DATE_COLUMN_NAME			= Messages.getString("TaskIO.10"); //$NON-NLS-1$
-	private static final String			DUE_YEAR_COLUMN_NAME				= Messages.getString("TaskIO.11"); //$NON-NLS-1$
-	private static final String			DUE_MONTH_COLUMN_NAME				= Messages.getString("TaskIO.12"); //$NON-NLS-1$
-	private static final String			DUE_DATE_COLUMN_NAME				= Messages.getString("TaskIO.13"); //$NON-NLS-1$
-	private static final String			IS_REPEATING_TASK_COLUMN_NAME		= Messages.getString("TaskIO.14"); //$NON-NLS-1$
-	private static final String			REPEAT_PERIOD_COUNT_COLUMN_NAME		= Messages.getString("TaskIO.15"); //$NON-NLS-1$
-	private static final String			REPEAT_PERIOD_TYPE_COLUMN_NAME		= Messages.getString("TaskIO.16"); //$NON-NLS-1$
-	private static final String			REPEAT_RESTART_TYPE_COLUMN_NAME		= Messages.getString("TaskIO.17"); //$NON-NLS-1$
-	private static final String			IS_COMPLETED_COLUMN_NAME			= Messages.getString("TaskIO.18"); //$NON-NLS-1$
-	private static final String			COMPLETION_YEAR_COLUMN_NAME			= Messages.getString("TaskIO.19"); //$NON-NLS-1$
-	private static final String			COMPLETION_MONTH_COLUMN_NAME		= Messages.getString("TaskIO.20"); //$NON-NLS-1$
-	private static final String			COMPLETION_DATE_COLUMN_NAME			= Messages.getString("TaskIO.21"); //$NON-NLS-1$
+	private static final String	ID_COLUMN_NAME						= Messages.getString("TaskIO.0"); //$NON-NLS-1$
+	private static final String	PARENT_ID_COLUMN_NAME				= Messages.getString("TaskIO.1"); //$NON-NLS-1$
+	private static final String	CHILDREN_ARE_ORDERED_COLUMN_NAME	= Messages.getString("TaskIO.2"); //$NON-NLS-1$
+	private static final String	LIVE_CHILD_ID_COLUMN_NAME			= Messages.getString("TaskIO.3"); //$NON-NLS-1$
+	private static final String	DESC_COLUMN_NAME					= Messages.getString("TaskIO.4"); //$NON-NLS-1$
+	private static final String	PRIORITY_COLUMN_NAME				= Messages.getString("TaskIO.5"); //$NON-NLS-1$
+	private static final String	HAS_OPENING_DATE_COLUMN_NAME		= Messages.getString("TaskIO.6"); //$NON-NLS-1$
+	private static final String	OPENING_YEAR_COLUMN_NAME			= Messages.getString("TaskIO.7"); //$NON-NLS-1$
+	private static final String	OPENING_MONTH_COLUMN_NAME			= Messages.getString("TaskIO.8"); //$NON-NLS-1$
+	private static final String	OPENING_DATE_COLUMN_NAME			= Messages.getString("TaskIO.9"); //$NON-NLS-1$
+	private static final String	HAS_DUE_DATE_COLUMN_NAME			= Messages.getString("TaskIO.10"); //$NON-NLS-1$
+	private static final String	DUE_YEAR_COLUMN_NAME				= Messages.getString("TaskIO.11"); //$NON-NLS-1$
+	private static final String	DUE_MONTH_COLUMN_NAME				= Messages.getString("TaskIO.12"); //$NON-NLS-1$
+	private static final String	DUE_DATE_COLUMN_NAME				= Messages.getString("TaskIO.13"); //$NON-NLS-1$
+	private static final String	IS_REPEATING_TASK_COLUMN_NAME		= Messages.getString("TaskIO.14"); //$NON-NLS-1$
+	private static final String	REPEAT_PERIOD_COUNT_COLUMN_NAME		= Messages.getString("TaskIO.15"); //$NON-NLS-1$
+	private static final String	REPEAT_PERIOD_TYPE_COLUMN_NAME		= Messages.getString("TaskIO.16"); //$NON-NLS-1$
+	private static final String	REPEAT_RESTART_TYPE_COLUMN_NAME		= Messages.getString("TaskIO.17"); //$NON-NLS-1$
+	private static final String	IS_COMPLETED_COLUMN_NAME			= Messages.getString("TaskIO.18"); //$NON-NLS-1$
+	private static final String	COMPLETION_YEAR_COLUMN_NAME			= Messages.getString("TaskIO.19"); //$NON-NLS-1$
+	private static final String	COMPLETION_MONTH_COLUMN_NAME		= Messages.getString("TaskIO.20"); //$NON-NLS-1$
+	private static final String	COMPLETION_DATE_COLUMN_NAME			= Messages.getString("TaskIO.21"); //$NON-NLS-1$
 
-	private static final String	TASKS_FILE_NAME						= Messages.getString("TaskIO.22"); //$NON-NLS-1$
-
-	private static File getTasksFile()
-	{
-		final String fileLoc = PMMainController.getProperty(PropertiesManager.SAVE_LOCATION_KEY);
-		return new File(fileLoc, TASKS_FILE_NAME);
-	}
+	private static final String TASKS_FILE_NAME = Messages.getString("TaskIO.22"); //$NON-NLS-1$
 
 	/**
-	 * @param p_file
-	 * @return A TaskDB object built from the given file. The file should be in the
-	 *         SimpleDB format and have a header. The header should have columns for
-	 *         each element of the constructor of the task object.
+	 * @param  p_file
+	 *
+	 * @return        A TaskDB object built from the given file. The file should
+	 *                    be in the SimpleDB format and have a header. The
+	 *                    header should have columns for each element of the
+	 *                    constructor of the task object.
 	 */
 	public static TreeMap<Integer, Task> loadTasksFromFile()
 	{
@@ -69,27 +65,46 @@ public class TaskIO
 
 			final boolean isRepeatingTask = simpleDB.get(i, IS_REPEATING_TASK_COLUMN_NAME).asBoolean();
 			final int repeatPeriodCount = simpleDB.get(i, REPEAT_PERIOD_COUNT_COLUMN_NAME).asInt();
-			final RepeatPeriodType repeatPeriodType = simpleDB.get(i, REPEAT_PERIOD_TYPE_COLUMN_NAME)
-					.asRepeatPeriodType();
-			final RepeatRestartType repeatRestartType = simpleDB.get(i, REPEAT_RESTART_TYPE_COLUMN_NAME)
-					.asRepeatRestartType();
+			final RepeatPeriodType repeatPeriodType =
+				simpleDB.get(i, REPEAT_PERIOD_TYPE_COLUMN_NAME).asRepeatPeriodType();
+			final RepeatRestartType repeatRestartType =
+				simpleDB.get(i, REPEAT_RESTART_TYPE_COLUMN_NAME).asRepeatRestartType();
 
 			final boolean isCompleted = simpleDB.get(i, IS_COMPLETED_COLUMN_NAME).asBoolean();
 			final int completionYear = simpleDB.get(i, COMPLETION_YEAR_COLUMN_NAME).asInt();
 			final int completionMonth = simpleDB.get(i, COMPLETION_MONTH_COLUMN_NAME).asInt();
 			final int completionDate = simpleDB.get(i, COMPLETION_DATE_COLUMN_NAME).asInt();
 
-			final Task task = new Task(id, parentID, childrenAreOrdered, liveChildID, description, priority,
-					hasOpeningDate, openingYear, openingMonth, openingDate, hasDueDate, dueYear, dueMonth, dueDate,
-					isRepeatingTask, repeatPeriodCount, repeatPeriodType, repeatRestartType, isCompleted,
-					completionYear, completionMonth, completionDate);
+			final Task task = new Task(
+				id,
+				parentID,
+				childrenAreOrdered,
+				liveChildID,
+				description,
+				priority,
+				hasOpeningDate,
+				openingYear,
+				openingMonth,
+				openingDate,
+				hasDueDate,
+				dueYear,
+				dueMonth,
+				dueDate,
+				isRepeatingTask,
+				repeatPeriodCount,
+				repeatPeriodType,
+				repeatRestartType,
+				isCompleted,
+				completionYear,
+				completionMonth,
+				completionDate);
 			ret.put(id, task);
 		}
 
 		return ret;
 	}
 
-	public static void main(String[] p_args)
+	public static void main(final String[] p_args)
 	{
 		final SimpleDB db = SimpleDBIO.loadFromFile(getTasksFile(), true);
 		SimpleDBIO.addColumnToDB(db, LIVE_CHILD_ID_COLUMN_NAME, String.valueOf(Constants.NO_ID));
@@ -132,5 +147,11 @@ public class TaskIO
 		}
 
 		SimpleDBIO.saveToFile(toSave, getTasksFile());
+	}
+
+	private static File getTasksFile()
+	{
+		final String fileLoc = PMMainController.getProperty(PropertiesManager.SAVE_LOCATION_KEY);
+		return new File(fileLoc, TASKS_FILE_NAME);
 	}
 }

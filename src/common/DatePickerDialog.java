@@ -3,7 +3,12 @@ package common;
 import java.awt.BorderLayout;
 import java.time.LocalDate;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import datepicker.JDatePicker;
 
@@ -14,11 +19,11 @@ public class DatePickerDialog extends JOptionPane
 	 */
 	private static final long serialVersionUID = -3511960440606047358L;
 
-	public static LocalDate getDate(JFrame p_frame)
+	public static LocalDate getDate(final JFrame p_frame)
 	{
 		final JOptionPane optionPane = new DatePickerDialog();
 
-		final JDialog     dialog     = new JDialog(p_frame, Messages.getString("DatePickerDialog.0"), true); //$NON-NLS-1$
+		final JDialog dialog = new JDialog(p_frame, Messages.getString("DatePickerDialog.0"), true); //$NON-NLS-1$
 		dialog.setContentPane(optionPane);
 		dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		optionPane.addPropertyChangeListener(e ->
@@ -40,7 +45,7 @@ public class DatePickerDialog extends JOptionPane
 		return (LocalDate) optionPane.getValue();
 	}
 
-	public static void main(String[] p_args)
+	public static void main(final String[] p_args)
 	{
 		System.out.println(getDate(new JFrame()));
 	}
@@ -49,8 +54,12 @@ public class DatePickerDialog extends JOptionPane
 
 	public DatePickerDialog()
 	{
-		super(Messages.getString("DatePickerDialog.1"), JOptionPane.QUESTION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, //$NON-NLS-1$
-			null, null);
+		super(
+			Messages.getString("DatePickerDialog.1"), //$NON-NLS-1$
+			JOptionPane.QUESTION_MESSAGE,
+			JOptionPane.DEFAULT_OPTION,
+			null,null,
+			null);
 
 		setSize(500, 500);
 		setLayout(new BorderLayout());
@@ -64,7 +73,7 @@ public class DatePickerDialog extends JOptionPane
 		centerPanel.setLayout(new BorderLayout());
 		centerPanel.add(jPanel, BorderLayout.WEST);
 
-		final JPanel  southPanel   = new JPanel();
+		final JPanel southPanel = new JPanel();
 		final JButton selectButton = new JButton(Messages.getString("DatePickerDialog.2")); //$NON-NLS-1$
 		selectButton.addActionListener(p_arg0 -> setValue(PMMainController.getDateObject(m_picker.getModel())));
 

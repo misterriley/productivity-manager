@@ -2,7 +2,13 @@ package common;
 
 import java.awt.BorderLayout;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 public class InputStringDialog extends JOptionPane
 {
@@ -11,7 +17,7 @@ public class InputStringDialog extends JOptionPane
 	 */
 	private static final long serialVersionUID = 689472856890095133L;
 
-	public static double getInputDouble(JFrame p_frame, String p_prompt, double p_default)
+	public static double getInputDouble(final JFrame p_frame, final String p_prompt, final double p_default)
 	{
 		double ret = 0;
 
@@ -32,11 +38,11 @@ public class InputStringDialog extends JOptionPane
 		return ret;
 	}
 
-	public static String getInputString(String p_prompt, String p_defaultText)
+	public static String getInputString(final String p_prompt, final String p_defaultText)
 	{
 		final JOptionPane optionPane = new InputStringDialog(p_defaultText);
 
-		final JDialog     dialog     = new JDialog((JFrame) null, p_prompt, true);
+		final JDialog dialog = new JDialog((JFrame) null, p_prompt, true);
 		dialog.setContentPane(optionPane);
 		dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		optionPane.addPropertyChangeListener(e ->
@@ -58,18 +64,25 @@ public class InputStringDialog extends JOptionPane
 		return (String) optionPane.getValue();
 	}
 
-	public static void main(String[] p_args)
+	public static void main(final String[] p_args)
 	{
-		System.out.println(getInputString(Messages.getString("InputStringDialog.1"), //$NON-NLS-1$
-			Messages.getString("InputStringDialog.2"))); //$NON-NLS-1$
+		System.out
+			.println(
+				getInputString(
+					Messages.getString("InputStringDialog.1"), //$NON-NLS-1$
+					Messages.getString("InputStringDialog.2"))); //$NON-NLS-1$
 	}
 
 	private final JTextField m_textField;
 
-	private InputStringDialog(String p_defaultText)
+	private InputStringDialog(final String p_defaultText)
 	{
-		super(Messages.getString("InputStringDialog.3"), JOptionPane.QUESTION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, //$NON-NLS-1$
-			null, null);
+		super(
+			Messages.getString("InputStringDialog.3"), //$NON-NLS-1$
+			JOptionPane.QUESTION_MESSAGE,
+			JOptionPane.DEFAULT_OPTION,
+			null,null,
+			null);
 
 		setSize(500, 500);
 		setLayout(new BorderLayout());
@@ -81,7 +94,7 @@ public class InputStringDialog extends JOptionPane
 		centerPanel.setLayout(new BorderLayout());
 		centerPanel.add(jPanel, BorderLayout.WEST);
 
-		final JPanel  southPanel   = new JPanel();
+		final JPanel southPanel = new JPanel();
 		final JButton selectButton = new JButton(Messages.getString("InputStringDialog.4")); //$NON-NLS-1$
 		selectButton.addActionListener(p_arg0 -> setValue(m_textField.getText()));
 

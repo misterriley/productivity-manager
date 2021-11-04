@@ -17,14 +17,14 @@ public class TaskTree extends JPanel implements TreeSelectionListener
 	/**
 	 *
 	 */
-	private static final long				serialVersionUID	= 6673081031349265845L;
+	private static final long serialVersionUID = 6673081031349265845L;
 
 	private final JTree						m_tree;
 	private final DefaultMutableTreeNode	m_liveTasksNode;
 	private final DefaultMutableTreeNode	m_completedTasksNode;
 	private final TaskManagementPanel		m_taskManagementPanel;
 
-	public TaskTree(TaskManagementPanel p_taskManagementPanel)
+	public TaskTree(final TaskManagementPanel p_taskManagementPanel)
 	{
 		super(new GridLayout(1, 0));
 
@@ -47,10 +47,11 @@ public class TaskTree extends JPanel implements TreeSelectionListener
 			{
 				m_completedTasksNode.add(node);
 			}
-			else if (!task.hasParent())
-			{
-				m_liveTasksNode.add(node);
-			}
+			else
+				if (!task.hasParent())
+				{
+					m_liveTasksNode.add(node);
+				}
 		}
 
 		for (final Task task : p_taskManagementPanel.getMainModel().getTasks().values())
@@ -76,12 +77,12 @@ public class TaskTree extends JPanel implements TreeSelectionListener
 		add(treeView);
 	}
 
-	public void addAndHighlightNode(DefaultMutableTreeNode p_parentNode, Task p_childTask)
+	public void addAndHighlightNode(final DefaultMutableTreeNode p_parentNode, final Task p_childTask)
 	{
 		final DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(p_childTask);
 		p_childTask.setNode(newNode);
 
-		final DefaultTreeModel model = (DefaultTreeModel)m_tree.getModel();
+		final DefaultTreeModel model = (DefaultTreeModel) m_tree.getModel();
 		model.insertNodeInto(newNode, p_parentNode, p_parentNode.getChildCount());
 		p_parentNode.add(newNode);
 		model.reload(p_parentNode);
@@ -89,12 +90,12 @@ public class TaskTree extends JPanel implements TreeSelectionListener
 		setSelectedTask(p_childTask);
 	}
 
-	public void addAndHighlightNode(Task p_task, DefaultMutableTreeNode p_parent)
+	public void addAndHighlightNode(final Task p_task, final DefaultMutableTreeNode p_parent)
 	{
 		final DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(p_task);
 		p_task.setNode(newNode);
 
-		final DefaultTreeModel model = (DefaultTreeModel)m_tree.getModel();
+		final DefaultTreeModel model = (DefaultTreeModel) m_tree.getModel();
 
 		final DefaultMutableTreeNode parent = p_parent == null ? m_liveTasksNode : p_parent;
 		model.insertNodeInto(newNode, parent, parent.getChildCount());
@@ -107,13 +108,13 @@ public class TaskTree extends JPanel implements TreeSelectionListener
 
 	public boolean canCurrentNodeBeDeleted()
 	{
-		final DefaultMutableTreeNode node = (DefaultMutableTreeNode)m_tree.getLastSelectedPathComponent();
+		final DefaultMutableTreeNode node = (DefaultMutableTreeNode) m_tree.getLastSelectedPathComponent();
 		return node != m_completedTasksNode && node != m_liveTasksNode && node != m_tree.getModel().getRoot();
 	}
 
 	public void deleteCurrentTask()
 	{
-		final DefaultMutableTreeNode node = (DefaultMutableTreeNode)m_tree.getLastSelectedPathComponent();
+		final DefaultMutableTreeNode node = (DefaultMutableTreeNode) m_tree.getLastSelectedPathComponent();
 		DefaultMutableTreeNode nextInLine = node.getNextSibling();
 		if (nextInLine == null)
 		{
@@ -121,10 +122,10 @@ public class TaskTree extends JPanel implements TreeSelectionListener
 		}
 		if (nextInLine == null)
 		{
-			nextInLine = (DefaultMutableTreeNode)node.getParent();
+			nextInLine = (DefaultMutableTreeNode) node.getParent();
 		}
-		final DefaultTreeModel model = (DefaultTreeModel)m_tree.getModel();
-		final DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
+		final DefaultTreeModel model = (DefaultTreeModel) m_tree.getModel();
+		final DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
 		model.removeNodeFromParent(node);
 		model.reload(parent);
 
@@ -134,10 +135,10 @@ public class TaskTree extends JPanel implements TreeSelectionListener
 
 	public Task getCurrentTask()
 	{
-		final DefaultMutableTreeNode node = (DefaultMutableTreeNode)m_tree.getLastSelectedPathComponent();
+		final DefaultMutableTreeNode node = (DefaultMutableTreeNode) m_tree.getLastSelectedPathComponent();
 		if (node != null && node.getUserObject() instanceof Task)
 		{
-			return (Task)node.getUserObject();
+			return (Task) node.getUserObject();
 		}
 
 		return null;
@@ -145,12 +146,12 @@ public class TaskTree extends JPanel implements TreeSelectionListener
 
 	public DefaultMutableTreeNode getSelectedNode()
 	{
-		return (DefaultMutableTreeNode)m_tree.getLastSelectedPathComponent();
+		return (DefaultMutableTreeNode) m_tree.getLastSelectedPathComponent();
 	}
 
 	public void moveCurrentTaskToCompletedTree()
 	{
-		final DefaultMutableTreeNode node = (DefaultMutableTreeNode)m_tree.getLastSelectedPathComponent();
+		final DefaultMutableTreeNode node = (DefaultMutableTreeNode) m_tree.getLastSelectedPathComponent();
 		DefaultMutableTreeNode nextInLine = node.getNextSibling();
 		if (nextInLine == null)
 		{
@@ -158,9 +159,9 @@ public class TaskTree extends JPanel implements TreeSelectionListener
 		}
 		if (nextInLine == null)
 		{
-			nextInLine = (DefaultMutableTreeNode)node.getParent();
+			nextInLine = (DefaultMutableTreeNode) node.getParent();
 		}
-		final DefaultTreeModel model = (DefaultTreeModel)m_tree.getModel();
+		final DefaultTreeModel model = (DefaultTreeModel) m_tree.getModel();
 
 		model.removeNodeFromParent(node);
 		model.reload(m_liveTasksNode);
@@ -174,18 +175,18 @@ public class TaskTree extends JPanel implements TreeSelectionListener
 		m_tree.expandPath(tp);
 	}
 
-	public void refresh(DefaultMutableTreeNode p_node)
+	public void refresh(final DefaultMutableTreeNode p_node)
 	{
-		final DefaultTreeModel model = (DefaultTreeModel)m_tree.getModel();
+		final DefaultTreeModel model = (DefaultTreeModel) m_tree.getModel();
 		model.reload(p_node);
 	}
 
 	public void refreshSelectedNode()
 	{
-		refresh((DefaultMutableTreeNode)m_tree.getLastSelectedPathComponent());
+		refresh((DefaultMutableTreeNode) m_tree.getLastSelectedPathComponent());
 	}
 
-	public void setSelectedTask(Task p_task)
+	public void setSelectedTask(final Task p_task)
 	{
 		final TreePath tp = new TreePath(p_task.getNode().getPath());
 		m_tree.setSelectionPath(tp);
@@ -194,9 +195,9 @@ public class TaskTree extends JPanel implements TreeSelectionListener
 
 	/** Required by TreeSelectionListener interface. */
 	@Override
-	public void valueChanged(TreeSelectionEvent e)
+	public void valueChanged(final TreeSelectionEvent e)
 	{
-		final DefaultMutableTreeNode node = (DefaultMutableTreeNode)m_tree.getLastSelectedPathComponent();
+		final DefaultMutableTreeNode node = (DefaultMutableTreeNode) m_tree.getLastSelectedPathComponent();
 
 		if (node == null)
 		{
@@ -211,7 +212,7 @@ public class TaskTree extends JPanel implements TreeSelectionListener
 		}
 		else
 		{
-			m_taskManagementPanel.getTaskInfoPanel().setCurrentTask((Task)nodeInfo);
+			m_taskManagementPanel.getTaskInfoPanel().setCurrentTask((Task) nodeInfo);
 		}
 	}
 }

@@ -17,19 +17,19 @@ import datepicker.DateModel;
  */
 public class PMMainController
 {
-	private static final Random      RANDOM = new Random();
-	private static PropertiesManager m_propertiesManager;
-	private static MainView          m_view;
-	private static MainModel         m_model;
+	private static final Random			RANDOM	= new Random();
+	private static PropertiesManager	m_propertiesManager;
+	private static MainView				m_view;
+	private static MainModel			m_model;
 
 	static
 	{
 		m_propertiesManager = new PropertiesManager();
 	}
 
-	public static void convertToOrderedParent(Task p_task)
+	public static void convertToOrderedParent(final Task p_task)
 	{
-		boolean   reset       = false;
+		boolean reset = false;
 		final int liveChildID = p_task.getLiveChildID();
 		if (liveChildID == Constants.NO_ID)
 		{
@@ -47,32 +47,32 @@ public class PMMainController
 
 		if (reset)
 		{
-			final DefaultMutableTreeNode firstChild    = (DefaultMutableTreeNode) p_task.getNode().getFirstChild();
-			final Task                   liveChildTask = (Task) firstChild.getUserObject();
+			final DefaultMutableTreeNode firstChild = (DefaultMutableTreeNode) p_task.getNode().getFirstChild();
+			final Task liveChildTask = (Task) firstChild.getUserObject();
 			p_task.setLiveChildID(liveChildTask.getID());
 		}
 	}
 
-	public static LocalDate getDateObject(DateModel<?> p_model)
+	public static LocalDate getDateObject(final DateModel<?> p_model)
 	{
-		final int year  = p_model.getYear();
+		final int year = p_model.getYear();
 		final int month = p_model.getMonthButWrong() + 1;
-		final int date  = p_model.getDay();
+		final int date = p_model.getDay();
 
 		return LocalDate.of(year, month, date);
 	}
 
-	public static String getProperty(String p_key)
+	public static String getProperty(final String p_key)
 	{
 		return m_propertiesManager.getProperty(p_key);
 	}
 
-	public static double getSelectionTemperature(int p_sensitivity, int p_maxSensitivity)
+	public static double getSelectionTemperature(final int p_sensitivity, final int p_maxSensitivity)
 	{
 		return Constants.SELECTION_TEMP_MULTIPLIER * p_sensitivity / (p_maxSensitivity - p_sensitivity);
 	}
 
-	public static boolean isTaskLive(Task p_task)
+	public static boolean isTaskLive(final Task p_task)
 	{
 		if (p_task == null)
 		{
@@ -97,13 +97,13 @@ public class PMMainController
 		final TreeNode[] path = p_task.getNode().getPath();
 		for (int i = 1; i < path.length; i++)
 		{
-			final DefaultMutableTreeNode node   = (DefaultMutableTreeNode) path[i];
+			final DefaultMutableTreeNode node = (DefaultMutableTreeNode) path[i];
 			final DefaultMutableTreeNode parent = (DefaultMutableTreeNode) path[i - 1];
 
 			if (node.getUserObject() instanceof Task && parent.getUserObject() instanceof Task)
 			{
 				final Task parentTask = (Task) parent.getUserObject();
-				final Task childTask  = (Task) node.getUserObject();
+				final Task childTask = (Task) node.getUserObject();
 
 				if (parentTask.childrenAreOrdered() && parentTask.getLiveChildID() != childTask.getID())
 				{
@@ -150,11 +150,16 @@ public class PMMainController
 		}
 
 		// figure out correct date of completion
-		final TaskCompletionOption[] options  = TaskCompletionOption.values();
-		final int                    response =
-			JOptionPane.showOptionDialog(m_view.getFrame(), Messages.getString("PMMainController.1"),                //$NON-NLS-1$
-				Messages.getString("PMMainController.2"), JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,  //$NON-NLS-1$
-				null, options, null);
+		final TaskCompletionOption[] options = TaskCompletionOption.values();
+		final int response = JOptionPane
+			.showOptionDialog(
+				m_view.getFrame(),
+				Messages.getString("PMMainController.1"),                //$NON-NLS-1$
+				Messages.getString("PMMainController.2"), //$NON-NLS-1$
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.QUESTION_MESSAGE,null,
+				options,
+				null);
 
 		if (response == JOptionPane.CLOSED_OPTION)
 		{
@@ -204,7 +209,7 @@ public class PMMainController
 			if (currentTask.hasDueDate())
 			{
 				final LocalDate currentDueDate = currentTask.getDueLocalDate();
-				LocalDate       baseDate;
+				LocalDate baseDate;
 
 				switch (currentTask.getRepeatRestartType())
 				{
@@ -240,7 +245,7 @@ public class PMMainController
 
 				if (currentTask.hasOpeningDate())
 				{
-					final long      daysAdvanced   = ChronoUnit.DAYS.between(currentDueDate, nextDueDate);
+					final long daysAdvanced = ChronoUnit.DAYS.between(currentDueDate, nextDueDate);
 					final LocalDate newOpeningDate = currentTask.getOpeningLocalDate().plusDays(daysAdvanced);
 					currentTask.setOpeningLocalDate(newOpeningDate);
 				}
@@ -264,13 +269,13 @@ public class PMMainController
 		return true;
 	}
 
-	public static Task pullTask(Collection<Task> p_tasks, int p_sensitivity, int p_maxSensitivity)
+	public static Task pullTask(final Collection<Task> p_tasks, final int p_sensitivity, final int p_maxSensitivity)
 	{
-		final double          temp        = getSelectionTemperature(p_sensitivity, p_maxSensitivity);
-		final Task[]          taskArray   = p_tasks.toArray(new Task[] {});
-		final double[]        weights     = new double[p_tasks.size()];
+		final double temp = getSelectionTemperature(p_sensitivity, p_maxSensitivity);
+		final Task[] taskArray = p_tasks.toArray(new Task[] {});
+		final double[] weights = new double[p_tasks.size()];
 
-		double                sum         = 0;
+		double sum = 0;
 		final ArrayList<Task> currentBest = new ArrayList<>();
 
 		for (int i = 0; i < taskArray.length; i++)
@@ -282,14 +287,15 @@ public class PMMainController
 				{
 					currentBest.add(taskArray[i]);
 				}
-				else if (currentBest.get(0).getPriority() < priority)
-				{
-					currentBest.clear();
-					currentBest.add(taskArray[i]);
-				}
+				else
+					if (currentBest.get(0).getPriority() < priority)
+					{
+						currentBest.clear();
+						currentBest.add(taskArray[i]);
+					}
 
-				weights[i]  = Math.exp(temp * priority);
-				sum        += weights[i];
+				weights[i] = Math.exp(temp * priority);
+				sum += weights[i];
 			}
 		}
 
@@ -299,9 +305,9 @@ public class PMMainController
 			{
 				return null;
 			}
-			final double rnd  = RANDOM.nextDouble() * sum;
+			final double rnd = RANDOM.nextDouble() * sum;
 
-			double       comp = 0;
+			double comp = 0;
 			for (int i = 0; i < weights.length; i++)
 			{
 				comp += weights[i];
@@ -325,26 +331,26 @@ public class PMMainController
 	{
 		m_view.getTaskManagementPanel().getTaskInfoPanel().saveUIToCurrentTask();
 
-		double    sum          = 0;
-		double    sumOfSquares = 0;
-		final int count        = m_model.getTasks().size();
+		double sum = 0;
+		double sumOfSquares = 0;
+		final int count = m_model.getTasks().size();
 
 		for (final Task task : m_model.getTasks().values())
 		{
 			final double priority = task.getPriority();
-			sum          += priority;
+			sum += priority;
 			sumOfSquares += Math.pow(priority, 2);
 		}
 
-		final double mean     = sum / count;
+		final double mean = sum / count;
 		final double variance = (sumOfSquares - sum * sum / count) / (count - 1);
-		final double sd       = Math.sqrt(variance);
+		final double sd = Math.sqrt(variance);
 
 		for (final Task task : m_model.getTasks().values())
 		{
 			final double oldPriority = task.getPriority();
-			final double zScore      = (oldPriority - mean) / sd;
-			double       newPriority = Constants.TASK_TARGET_PRIORITY_MEAN + zScore * Constants.TASK_TARGET_PRIORITY_SD;
+			final double zScore = (oldPriority - mean) / sd;
+			double newPriority = Constants.TASK_TARGET_PRIORITY_MEAN + zScore * Constants.TASK_TARGET_PRIORITY_SD;
 
 			if (newPriority > Constants.MAX_TASK_PRIORITY)
 			{
@@ -363,6 +369,11 @@ public class PMMainController
 		m_view.getTaskManagementPanel().getTaskInfoPanel().refreshCurrentTask();
 	}
 
+	public static void saveModel()
+	{
+		TaskIO.saveTasksToFile(m_model.getTasks().values());
+	}
+
 	private static void runProductivityManager()
 	{
 		m_model = new MainModel();
@@ -377,10 +388,5 @@ public class PMMainController
 			saveModel();
 			m_propertiesManager.save();
 		}));
-	}
-
-	public static void saveModel()
-	{
-		TaskIO.saveTasksToFile(m_model.getTasks().values());
 	}
 }

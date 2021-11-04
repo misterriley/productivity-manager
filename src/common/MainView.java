@@ -19,14 +19,14 @@ public class MainView
 {
 	private TaskManagementPanel m_taskManagementPanel;
 
-	private final JFrame        m_frame;
-	private final JTabbedPane   m_tabbedPane;
+	private final JFrame		m_frame;
+	private final JTabbedPane	m_tabbedPane;
 
 	/**
 	 * Creates the MainView object, which displays the UI for the the
 	 * productivity manager
 	 */
-	public MainView(MainModel p_mainModel)
+	public MainView(final MainModel p_mainModel)
 	{
 		m_frame = new JFrame(Messages.getString("MainView.0")); //$NON-NLS-1$
 		m_frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -46,20 +46,6 @@ public class MainView
 		return m_frame;
 	}
 
-	private JTabbedPane getTabbedPane(MainModel p_mainModel)
-	{
-		final JTabbedPane tabbedPane = new JTabbedPane();
-		m_taskManagementPanel = new TaskManagementPanel(p_mainModel);
-
-		tabbedPane.addTab(Messages.getString("MainView.1"), null, new TaskPullPanel(p_mainModel, this), null); //$NON-NLS-1$
-		tabbedPane.addTab(Messages.getString("MainView.2"), null, m_taskManagementPanel, null); //$NON-NLS-1$
-
-		// The following line enables to use scrolling tabs.
-		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-
-		return tabbedPane;
-	}
-
 	public TaskManagementPanel getTaskManagementPanel()
 	{
 		return m_taskManagementPanel;
@@ -77,5 +63,19 @@ public class MainView
 	public void showTaskManagementPanel()
 	{
 		m_tabbedPane.setSelectedIndex(1);
+	}
+
+	private JTabbedPane getTabbedPane(final MainModel p_mainModel)
+	{
+		final JTabbedPane tabbedPane = new JTabbedPane();
+		m_taskManagementPanel = new TaskManagementPanel(p_mainModel);
+
+		tabbedPane.addTab(Messages.getString("MainView.1"), null, new TaskPullPanel(p_mainModel, this), null); //$NON-NLS-1$
+		tabbedPane.addTab(Messages.getString("MainView.2"), null, m_taskManagementPanel, null); //$NON-NLS-1$
+
+		// The following line enables to use scrolling tabs.
+		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+
+		return tabbedPane;
 	}
 }

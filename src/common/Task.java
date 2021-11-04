@@ -35,8 +35,8 @@ public class Task
 	private DefaultMutableTreeNode	m_node;
 	private boolean					m_childrenAreOrdered;
 	private int						m_liveChildID;			// only used when m_childAreOrdered == true. Indicates which
-															// child is the current live task.
-	private volatile boolean		m_isSnoozing;			// volatile because it is written to by a scheduling thread
+								// child is the current live task.
+	private volatile boolean m_isSnoozing;			// volatile because it is written to by a scheduling thread
 
 	/**
 	 * @param p_id
@@ -47,12 +47,29 @@ public class Task
 	 * @param p_completionMonth
 	 * @param p_completionDate
 	 */
-	public Task(final int p_id, final int p_parentID, final boolean p_childrenAreOrdered, final int p_liveChildID,
-			final String p_description, final int p_priority, final boolean p_hasOpeningDate, final int p_openingYear,
-			final int p_openingMonth, final int p_openingDate, final boolean p_hasDueDate, final int p_dueYear,
-			final int p_dueMonth, final int p_dueDate, final boolean p_isRepeatingTask, final int p_repeatPeriodCount,
-			final RepeatPeriodType p_repeatPeriodType, final RepeatRestartType p_repeatRestartType,
-			boolean p_isCompleted, int p_completionYear, int p_completionMonth, int p_completionDate)
+	public Task(
+		final int p_id,
+		final int p_parentID,
+		final boolean p_childrenAreOrdered,
+		final int p_liveChildID,
+		final String p_description,
+		final int p_priority,
+		final boolean p_hasOpeningDate,
+		final int p_openingYear,
+		final int p_openingMonth,
+		final int p_openingDate,
+		final boolean p_hasDueDate,
+		final int p_dueYear,
+		final int p_dueMonth,
+		final int p_dueDate,
+		final boolean p_isRepeatingTask,
+		final int p_repeatPeriodCount,
+		final RepeatPeriodType p_repeatPeriodType,
+		final RepeatRestartType p_repeatRestartType,
+		final boolean p_isCompleted,
+		final int p_completionYear,
+		final int p_completionMonth,
+		final int p_completionDate)
 	{
 		m_id = p_id;
 		m_parentID = p_parentID;
@@ -229,103 +246,103 @@ public class Task
 		return m_isSnoozing;
 	}
 
-	public void setChildrenAreOrdered(boolean p_childrenAreOrdered)
+	public void setChildrenAreOrdered(final boolean p_childrenAreOrdered)
 	{
 		m_childrenAreOrdered = p_childrenAreOrdered;
 	}
 
-	public void setCompleted(boolean p_isCompleted)
+	public void setCompleted(final boolean p_isCompleted)
 	{
 		m_isCompleted = p_isCompleted;
 	}
 
-	public void setCompletionDate(int p_completionDate)
+	public void setCompletionDate(final int p_completionDate)
 	{
 		m_completionDate = p_completionDate;
 	}
 
-	public void setCompletionLocalDate(LocalDate p_localDate)
+	public void setCompletionLocalDate(final LocalDate p_localDate)
 	{
 		m_completionDate = p_localDate.getDayOfMonth();
 		m_completionMonth = p_localDate.getMonthValue();
 		m_completionYear = p_localDate.getYear();
 	}
 
-	public void setCompletionMonth(int p_completionMonth)
+	public void setCompletionMonth(final int p_completionMonth)
 	{
 		m_completionMonth = p_completionMonth;
 	}
 
-	public void setCompletionYear(int p_completionYear)
+	public void setCompletionYear(final int p_completionYear)
 	{
 		m_completionYear = p_completionYear;
 	}
 
-	public void setDescription(String p_description)
+	public void setDescription(final String p_description)
 	{
 		m_description = p_description;
 	}
 
-	public void setDueDate(int p_dueDate)
+	public void setDueDate(final int p_dueDate)
 	{
 		m_dueDate = p_dueDate;
 	}
 
-	public void setDueLocalDate(LocalDate p_localDate)
+	public void setDueLocalDate(final LocalDate p_localDate)
 	{
 		m_dueDate = p_localDate.getDayOfMonth();
 		m_dueMonth = p_localDate.getMonthValue();
 		m_dueYear = p_localDate.getYear();
 	}
 
-	public void setDueMonth(int p_dueMonth)
+	public void setDueMonth(final int p_dueMonth)
 	{
 		m_dueMonth = p_dueMonth;
 	}
 
-	public void setDueYear(int p_dueYear)
+	public void setDueYear(final int p_dueYear)
 	{
 		m_dueYear = p_dueYear;
 	}
 
-	public void setHasDueDate(boolean p_hasDueDate)
+	public void setHasDueDate(final boolean p_hasDueDate)
 	{
 		m_hasDueDate = p_hasDueDate;
 	}
 
-	public void setHasOpeningDate(boolean p_hasOpeningDate)
+	public void setHasOpeningDate(final boolean p_hasOpeningDate)
 	{
 		m_hasOpeningDate = p_hasOpeningDate;
 	}
 
-	public void setLiveChildID(int p_liveChildID)
+	public void setLiveChildID(final int p_liveChildID)
 	{
 		m_liveChildID = p_liveChildID;
 	}
 
-	public void setNode(DefaultMutableTreeNode p_node)
+	public void setNode(final DefaultMutableTreeNode p_node)
 	{
 		m_node = p_node;
 	}
 
-	public void setOpeningDate(int p_openingDate)
+	public void setOpeningDate(final int p_openingDate)
 	{
 		m_openingDate = p_openingDate;
 	}
 
-	public void setOpeningLocalDate(LocalDate p_localDate)
+	public void setOpeningLocalDate(final LocalDate p_localDate)
 	{
 		m_openingDate = p_localDate.getDayOfMonth();
 		m_openingMonth = p_localDate.getMonthValue();
 		m_openingYear = p_localDate.getYear();
 	}
 
-	public void setOpeningMonth(int p_openingMonth)
+	public void setOpeningMonth(final int p_openingMonth)
 	{
 		m_openingMonth = p_openingMonth;
 	}
 
-	public void setOpeningYear(int p_openingYear)
+	public void setOpeningYear(final int p_openingYear)
 	{
 		m_openingYear = p_openingYear;
 	}
@@ -338,27 +355,27 @@ public class Task
 		m_priority = p_priority;
 	}
 
-	public void setRepeatingTask(boolean p_isRepeatingTask)
+	public void setRepeatingTask(final boolean p_isRepeatingTask)
 	{
 		m_isRepeatingTask = p_isRepeatingTask;
 	}
 
-	public void setRepeatPeriodCount(int p_repeatPeriodCount)
+	public void setRepeatPeriodCount(final int p_repeatPeriodCount)
 	{
 		m_repeatPeriodCount = p_repeatPeriodCount;
 	}
 
-	public void setRepeatPeriodType(RepeatPeriodType p_repeatPeriodType)
+	public void setRepeatPeriodType(final RepeatPeriodType p_repeatPeriodType)
 	{
 		m_repeatPeriodType = p_repeatPeriodType;
 	}
 
-	public void setRepeatRestartType(RepeatRestartType p_repeatRestartType)
+	public void setRepeatRestartType(final RepeatRestartType p_repeatRestartType)
 	{
 		m_repeatRestartType = p_repeatRestartType;
 	}
 
-	public void setSnoozing(boolean p_isSnoozing)
+	public void setSnoozing(final boolean p_isSnoozing)
 	{
 		m_isSnoozing = p_isSnoozing;
 	}

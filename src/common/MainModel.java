@@ -9,9 +9,9 @@ import java.util.TreeMap;
  */
 public class MainModel
 {
-	private TreeMap<Integer, Task>			m_tasks;
-	private int								m_maxTaskIDSoFar;
-	private int								m_maxRequirementIDSoFar;
+	private TreeMap<Integer, Task>	m_tasks;
+	private int						m_maxTaskIDSoFar;
+	private int						m_maxRequirementIDSoFar;
 
 	public MainModel()
 	{
@@ -19,7 +19,7 @@ public class MainModel
 		m_maxRequirementIDSoFar = -1;
 	}
 
-	public void addTask(Task p_createdTask)
+	public void addTask(final Task p_createdTask)
 	{
 		m_tasks.put(p_createdTask.getID(), p_createdTask);
 	}

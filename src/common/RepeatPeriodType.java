@@ -6,7 +6,7 @@ public enum RepeatPeriodType
 {
 	DAYS, WEEKS, MONTHS, YEARS;
 
-	public static RepeatPeriodType parseRepeatPeriodType(String p_value)
+	public static RepeatPeriodType parseRepeatPeriodType(final String p_value)
 	{
 		for (final RepeatPeriodType rpt : RepeatPeriodType.values())
 		{

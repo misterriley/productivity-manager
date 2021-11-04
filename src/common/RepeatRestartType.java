@@ -4,7 +4,7 @@ public enum RepeatRestartType
 {
 	UPON_COMPLETION, ON_DUE_DATE;
 
-	public static RepeatRestartType parseRepeatRestartType(String p_value)
+	public static RepeatRestartType parseRepeatRestartType(final String p_value)
 	{
 		for (final RepeatRestartType rrt : RepeatRestartType.values())
 		{

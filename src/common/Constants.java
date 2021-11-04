@@ -17,9 +17,9 @@ public class Constants
 	public static final int		TASK_TARGET_PRIORITY_MEAN		= MAX_TASK_PRIORITY / 2;
 	public static final double	TASK_TARGET_PRIORITY_SD			= MAX_TASK_PRIORITY / 6.0;
 	private static final double	MUTLITPLIER_PER_TENTH			= 2.5;
-	public static final double	SELECTION_TEMP_MULTIPLIER		= Math.log(MUTLITPLIER_PER_TENTH)
-			/ (MAX_TASK_PRIORITY / 10.0);
+	public static final double	SELECTION_TEMP_MULTIPLIER		=
+		Math.log(MUTLITPLIER_PER_TENTH) / (MAX_TASK_PRIORITY / 10.0);
 	public static final int		WIDTH							= 1200;
-	public static final int		HEIGHT							= (int)(WIDTH * .618);
-	public static final int     DEFAULT_SNOOZE_MINUTES = 15;
+	public static final int		HEIGHT							= (int) (WIDTH * .618);
+	public static final int		DEFAULT_SNOOZE_MINUTES			= 15;
 }
