@@ -35,22 +35,22 @@ public class DateComponentFormatter extends JFormattedTextField.AbstractFormatte
 	private static final long serialVersionUID = 5997312768041129127L;
 
 	@Override
-	public Object stringToValue(String text) throws ParseException
+	public Object stringToValue(final String text) throws ParseException
 	{
 		if (text == null || text.equals("")) //$NON-NLS-1$
 		{
 			return null;
 		}
-		final DateFormat format   =
+		final DateFormat format =
 			ComponentFormatDefaults.getInstance().getFormat(ComponentFormatDefaults.Key.SELECTED_DATE_FIELD);
-		final Date       date     = format.parse(text);
-		final Calendar   calendar = Calendar.getInstance();
+		final Date date = format.parse(text);
+		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar;
 	}
 
 	@Override
-	public String valueToString(Object value) throws ParseException
+	public String valueToString(final Object value) throws ParseException
 	{
 		final Calendar cal = (Calendar) value;
 		if (cal == null)

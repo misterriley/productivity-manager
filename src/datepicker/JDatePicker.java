@@ -22,15 +22,37 @@
  */
 package datepicker;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.AWTEvent;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.AWTEventListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.HierarchyBoundsListener;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.Popup;
+import javax.swing.PopupFactory;
+import javax.swing.SpringLayout;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -45,15 +67,19 @@ import datepicker.constraints.DateSelectionConstraint;
  * @author JC Oosthuizen
  * @author Yue Huang
  */
-public class JDatePicker extends JComponent
-	implements DatePicker
+public class JDatePicker extends JComponent implements DatePicker
 {
 
 	/**
 	 * This internal class hides the public event methods from the outside
 	 */
 	private class InternalEventHandler
-		implements ActionListener, HierarchyBoundsListener, ChangeListener, PropertyChangeListener, AWTEventListener
+		implements
+		ActionListener,
+		HierarchyBoundsListener,
+		ChangeListener,
+		PropertyChangeListener,
+		AWTEventListener
 	{
 
 		/**
@@ -65,7 +91,7 @@ public class JDatePicker extends JComponent
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent arg0)
+		public void actionPerformed(final ActionEvent arg0)
 		{
 			if (arg0.getSource() == m_button)
 			{
@@ -78,31 +104,32 @@ public class JDatePicker extends JComponent
 					hidePopup();
 				}
 			}
-			else if (arg0.getSource() == m_datePanel)
-			{
-				hidePopup();
-			}
+			else
+				if (arg0.getSource() == m_datePanel)
+				{
+					hidePopup();
+				}
 		}
 
 		@Override
-		public void ancestorMoved(HierarchyEvent arg0)
+		public void ancestorMoved(final HierarchyEvent arg0)
 		{
 			hidePopup();
 		}
 
 		@Override
-		public void ancestorResized(HierarchyEvent arg0)
+		public void ancestorResized(final HierarchyEvent arg0)
 		{
 			hidePopup();
 		}
 
 		@Override
-		public void eventDispatched(AWTEvent event)
+		public void eventDispatched(final AWTEvent event)
 		{
 			if (MouseEvent.MOUSE_CLICKED == event.getID() && event.getSource() != m_button)
 			{
-				final Set<Component> components   = getAllComponents(m_datePanel);
-				boolean              clickInPopup = false;
+				final Set<Component> components = getAllComponents(m_datePanel);
+				boolean clickInPopup = false;
 				for (final Component component : components)
 				{
 					if (event.getSource() == component)
@@ -118,7 +145,7 @@ public class JDatePicker extends JComponent
 		}
 
 		@Override
-		public void propertyChange(PropertyChangeEvent evt)
+		public void propertyChange(final PropertyChangeEvent evt)
 		{
 			// Short circuit if the following cases are found
 			if (evt.getOldValue() == null && evt.getNewValue() == null)
@@ -137,7 +164,7 @@ public class JDatePicker extends JComponent
 			// If the field is editable and we need to parse the date entered
 			if (evt.getNewValue() != null)
 			{
-				final Calendar     value = (Calendar) evt.getNewValue();
+				final Calendar value = (Calendar) evt.getNewValue();
 				final DateModel<?> model = new UtilCalendarModel(value);
 				// check constraints
 				if (!m_datePanel.checkConstraints(model))
@@ -146,8 +173,9 @@ public class JDatePicker extends JComponent
 					m_formattedTextField.setValue(evt.getOldValue());
 					return;
 				}
-				m_datePanel.getModel().setDateButWrong(value.get(Calendar.YEAR), value.get(Calendar.MONTH),
-					value.get(Calendar.DATE));
+				m_datePanel
+					.getModel()
+					.setDateButWrong(value.get(Calendar.YEAR), value.get(Calendar.MONTH), value.get(Calendar.DATE));
 				m_datePanel.getModel().setSelected(true);
 			}
 
@@ -160,12 +188,16 @@ public class JDatePicker extends JComponent
 		}
 
 		@Override
-		public void stateChanged(ChangeEvent arg0)
+		public void stateChanged(final ChangeEvent arg0)
 		{
 			if (arg0.getSource() == m_datePanel.getModel())
 			{
 				final DateModel<?> model = m_datePanel.getModel();
-				setTextFieldValue(m_formattedTextField, model.getYear(), model.getMonthButWrong(), model.getDay(),
+				setTextFieldValue(
+					m_formattedTextField,
+					model.getYear(),
+					model.getMonthButWrong(),
+					model.getDay(),
 					model.isSelected());
 			}
 		}
@@ -173,12 +205,7 @@ public class JDatePicker extends JComponent
 
 	private static final long serialVersionUID = 2814777654384974503L;
 
-	private static ComponentColorDefaults getColors()
-	{
-		return ComponentColorDefaults.getInstance();
-	}
-
-	public static void main(String[] args)
+	public static void main(final String[] args)
 	{
 		try
 		{
@@ -191,7 +218,7 @@ public class JDatePicker extends JComponent
 		final JFrame testFrame = new JFrame();
 		testFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		testFrame.setSize(500, 500);
-		final JPanel     jPanel = new JPanel();
+		final JPanel jPanel = new JPanel();
 		final DatePicker picker = new JDatePicker();
 		picker.setTextEditable(true);
 		picker.setShowYearButtons(true);
@@ -205,8 +232,12 @@ public class JDatePicker extends JComponent
 		testFrame.setVisible(true);
 	}
 
-	public static void setTextFieldValue(JFormattedTextField textField, int year, int month, int day,
-		boolean isSelected)
+	public static void setTextFieldValue(
+		final JFormattedTextField textField,
+		final int year,
+		final int month,
+		final int day,
+		final boolean isSelected)
 	{
 		if (!isSelected)
 		{
@@ -221,13 +252,18 @@ public class JDatePicker extends JComponent
 		}
 	}
 
-	Popup                              m_popup;
+	private static ComponentColorDefaults getColors()
+	{
+		return ComponentColorDefaults.getInstance();
+	}
 
-	final JFormattedTextField          m_formattedTextField;
+	Popup m_popup;
 
-	final JButton                      m_button;
+	final JFormattedTextField m_formattedTextField;
 
-	final JDatePanel                   m_datePanel;
+	final JButton m_button;
+
+	final JDatePanel m_datePanel;
 
 	private final InternalEventHandler m_internalEventHandler;
 
@@ -242,10 +278,9 @@ public class JDatePicker extends JComponent
 	/**
 	 * Create a JDatePicker with an initial value, with a UtilCalendarModel.
 	 *
-	 * @param value
-	 *     the initial value
+	 * @param value the initial value
 	 */
-	public JDatePicker(Calendar value)
+	public JDatePicker(final Calendar value)
 	{
 		this(new JDatePanel(value));
 	}
@@ -253,10 +288,9 @@ public class JDatePicker extends JComponent
 	/**
 	 * Create a JDatePicker with a custom date model.
 	 *
-	 * @param model
-	 *     a custom date model
+	 * @param model a custom date model
 	 */
-	public JDatePicker(DateModel<?> model)
+	public JDatePicker(final DateModel<?> model)
 	{
 		this(new JDatePanel(model));
 	}
@@ -264,10 +298,9 @@ public class JDatePicker extends JComponent
 	/**
 	 * Create a JDatePicker with an initial value, with a SqlDateModel.
 	 *
-	 * @param value
-	 *     the initial value
+	 * @param value the initial value
 	 */
-	public JDatePicker(java.sql.Date value)
+	public JDatePicker(final java.sql.Date value)
 	{
 		this(new JDatePanel(value));
 	}
@@ -275,10 +308,9 @@ public class JDatePicker extends JComponent
 	/**
 	 * Create a JDatePicker with an initial value, with a UtilDateModel.
 	 *
-	 * @param value
-	 *     the initial value
+	 * @param value the initial value
 	 */
-	public JDatePicker(java.util.Date value)
+	public JDatePicker(final java.util.Date value)
 	{
 		this(new JDatePanel(value));
 	}
@@ -287,15 +319,14 @@ public class JDatePicker extends JComponent
 	 * You are able to set the format of the date being displayed on the label.
 	 * Formatting is described at:
 	 *
-	 * @param datePanel
-	 *     The DatePanel to use
+	 * @param datePanel The DatePanel to use
 	 */
-	private JDatePicker(JDatePanel datePanel)
+	private JDatePicker(final JDatePanel datePanel)
 	{
-		this.m_datePanel = datePanel;
+		m_datePanel = datePanel;
 
 		// Initialise Variables
-		m_popup          = null;
+		m_popup = null;
 		datePanel
 			.setBorder(BorderFactory.createLineBorder(getColors().getColor(ComponentColorDefaults.Key.POPUP_BORDER)));
 		m_internalEventHandler = new InternalEventHandler();
@@ -308,7 +339,11 @@ public class JDatePicker extends JComponent
 		// Add and Configure TextField
 		m_formattedTextField = new JFormattedTextField(new DateComponentFormatter());
 		final DateModel<?> model = datePanel.getModel();
-		setTextFieldValue(m_formattedTextField, model.getYear(), model.getMonthButWrong(), model.getDay(),
+		setTextFieldValue(
+			m_formattedTextField,
+			model.getYear(),
+			model.getMonthButWrong(),
+			model.getDay(),
 			model.isSelected());
 		m_formattedTextField.setEditable(false);
 		add(m_formattedTextField);
@@ -353,13 +388,13 @@ public class JDatePicker extends JComponent
 	}
 
 	@Override
-	public void addActionListener(ActionListener actionListener)
+	public void addActionListener(final ActionListener actionListener)
 	{
 		m_datePanel.addActionListener(actionListener);
 	}
 
 	@Override
-	public void addDateSelectionConstraint(DateSelectionConstraint constraint)
+	public void addDateSelectionConstraint(final DateSelectionConstraint constraint)
 	{
 		m_datePanel.addDateSelectionConstraint(constraint);
 	}
@@ -369,24 +404,9 @@ public class JDatePicker extends JComponent
 		m_formattedTextField.setValue(null);
 	}
 
-	Set<Component> getAllComponents(Component component)
-	{
-		final Set<Component> children = new HashSet<>();
-		children.add(component);
-		if (component instanceof Container)
-		{
-			final Container   container  = (Container) component;
-			final Component[] components = container.getComponents();
-			for (final Component component2 : components)
-			{
-				children.addAll(getAllComponents(component2));
-			}
-		}
-		return children;
-	}
-
 	/*
 	 * (non-Javadoc)
+	 *
 	 * @see org.jdatepicker.JDatePicker#getButtonFocusable()
 	 */
 	@Override
@@ -403,6 +423,7 @@ public class JDatePicker extends JComponent
 
 	/*
 	 * (non-Javadoc)
+	 *
 	 * @see org.jdatepicker.JDatePicker#getJDateInstantPanel()
 	 */
 	public DatePanel getJDateInstantPanel()
@@ -422,18 +443,6 @@ public class JDatePicker extends JComponent
 		return m_formattedTextField.getColumns();
 	}
 
-	/**
-	 * Called internally to hide the popup dates.
-	 */
-	void hidePopup()
-	{
-		if (m_popup != null)
-		{
-			m_popup.hide();
-			m_popup = null;
-		}
-	}
-
 	@Override
 	public boolean isDoubleClickAction()
 	{
@@ -448,6 +457,7 @@ public class JDatePicker extends JComponent
 
 	/*
 	 * (non-Javadoc)
+	 *
 	 * @see org.jdatepicker.JDatePicker#isTextEditable()
 	 */
 	@Override
@@ -457,7 +467,7 @@ public class JDatePicker extends JComponent
 	}
 
 	@Override
-	public void removeActionListener(ActionListener actionListener)
+	public void removeActionListener(final ActionListener actionListener)
 	{
 		m_datePanel.removeActionListener(actionListener);
 	}
@@ -469,38 +479,42 @@ public class JDatePicker extends JComponent
 	}
 
 	@Override
-	public void removeDateSelectionConstraint(DateSelectionConstraint constraint)
+	public void removeDateSelectionConstraint(final DateSelectionConstraint constraint)
 	{
 		m_datePanel.removeDateSelectionConstraint(constraint);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 *
 	 * @see org.jdatepicker.JDatePicker#setButtonFocusable(boolean)
 	 */
 	@Override
-	public void setButtonFocusable(boolean focusable)
+	public void setButtonFocusable(final boolean focusable)
 	{
 		m_button.setFocusable(focusable);
 	}
 
-	public void setDateExternallyButWrong(int p_year, int p_month, int p_date)
+	public void setDateExternallyButWrong(final int p_year, final int p_month, final int p_date)
 	{
 		m_datePanel.getModel().setDateButWrong(p_year, p_month, p_date);
 		m_datePanel.getModel().setSelected(true);
-		setTextFieldValue(m_formattedTextField, m_datePanel.getModel().getYear(),
-			m_datePanel.getModel().getMonthButWrong(), m_datePanel.getModel().getDay(),
+		setTextFieldValue(
+			m_formattedTextField,
+			m_datePanel.getModel().getYear(),
+			m_datePanel.getModel().getMonthButWrong(),
+			m_datePanel.getModel().getDay(),
 			m_datePanel.getModel().isSelected());
 	}
 
 	@Override
-	public void setDoubleClickAction(boolean doubleClickAction)
+	public void setDoubleClickAction(final boolean doubleClickAction)
 	{
 		m_datePanel.setDoubleClickAction(doubleClickAction);
 	}
 
 	@Override
-	public void setEnabled(boolean enabled)
+	public void setEnabled(final boolean enabled)
 	{
 		m_button.setEnabled(enabled);
 		m_datePanel.setEnabled(enabled);
@@ -510,35 +524,64 @@ public class JDatePicker extends JComponent
 	}
 
 	@Override
-	public void setShowYearButtons(boolean showYearButtons)
+	public void setShowYearButtons(final boolean showYearButtons)
 	{
 		m_datePanel.setShowYearButtons(showYearButtons);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 *
 	 * @see org.jdatepicker.JDatePicker#setTextEditable(boolean)
 	 */
 	@Override
-	public void setTextEditable(boolean editable)
+	public void setTextEditable(final boolean editable)
 	{
 		m_formattedTextField.setEditable(editable);
 	}
 
 	@Override
-	public void setTextfieldColumns(int columns)
+	public void setTextfieldColumns(final int columns)
 	{
 		m_formattedTextField.setColumns(columns);
 	}
 
 	@Override
-	public void setVisible(boolean aFlag)
+	public void setVisible(final boolean aFlag)
 	{
 		if (!aFlag)
 		{
 			hidePopup();
 		}
 		super.setVisible(aFlag);
+	}
+
+	Set<Component> getAllComponents(final Component component)
+	{
+		final Set<Component> children = new HashSet<>();
+		children.add(component);
+		if (component instanceof Container)
+		{
+			final Container container = (Container) component;
+			final Component[] components = container.getComponents();
+			for (final Component component2 : components)
+			{
+				children.addAll(getAllComponents(component2));
+			}
+		}
+		return children;
+	}
+
+	/**
+	 * Called internally to hide the popup dates.
+	 */
+	void hidePopup()
+	{
+		if (m_popup != null)
+		{
+			m_popup.hide();
+			m_popup = null;
+		}
 	}
 
 	/**
@@ -549,9 +592,9 @@ public class JDatePicker extends JComponent
 		if (m_popup == null)
 		{
 			final PopupFactory fac = new PopupFactory();
-			final Point        xy  = getLocationOnScreen();
+			final Point xy = getLocationOnScreen();
 			m_datePanel.setVisible(true);
-			m_popup = fac.getPopup(this, m_datePanel, (int) xy.getX(), (int) (xy.getY() + this.getHeight()));
+			m_popup = fac.getPopup(this, m_datePanel, (int) xy.getX(), (int) (xy.getY() + getHeight()));
 			m_popup.show();
 		}
 	}

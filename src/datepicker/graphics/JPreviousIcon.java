@@ -1,24 +1,24 @@
 /**
- Copyright 2004 Juan Heyns. All rights reserved.
- Redistribution and use in source and binary forms, with or without modification, are
- permitted provided that the following conditions are met:
- 1. Redistributions of source code must retain the above copyright notice, this list of
- conditions and the following disclaimer.
- 2. Redistributions in binary form must reproduce the above copyright notice, this list
- of conditions and the following disclaimer in the documentation and/or other materials
- provided with the distribution.
- THIS SOFTWARE IS PROVIDED BY JUAN HEYNS ``AS IS'' AND ANY EXPRESS OR IMPLIED
- WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL JUAN HEYNS OR
- CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
- ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- The views and conclusions contained in the software and documentation are those of the
- authors and should not be interpreted as representing official policies, either expressed
- or implied, of Juan Heyns.
+ * Copyright 2004 Juan Heyns. All rights reserved. Redistribution and use in
+ * source and binary forms, with or without modification, are permitted provided
+ * that the following conditions are met: 1. Redistributions of source code must
+ * retain the above copyright notice, this list of conditions and the following
+ * disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution. THIS
+ * SOFTWARE IS PROVIDED BY JUAN HEYNS ``AS IS'' AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL JUAN HEYNS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. The views and conclusions
+ * contained in the software and documentation are those of the authors and
+ * should not be interpreted as representing official policies, either expressed
+ * or implied, of Juan Heyns.
  */
 package datepicker.graphics;
 
@@ -36,16 +36,16 @@ import javax.swing.Icon;
 public class JPreviousIcon implements Icon
 {
 
-	private int width;
-	private int height;
+	private int	width;
+	private int	height;
 
-	private final int[] xPoints = new int[3];
-	private final int[] yPoints = new int[3];
+	private final int[]	xPoints	= new int[3];
+	private final int[]	yPoints	= new int[3];
 
-	private boolean doubleArrow = false;
-	private final boolean enabled;
+	private boolean			doubleArrow	= false;
+	private final boolean	enabled;
 
-	public JPreviousIcon(int width, int height, boolean doubleArrow, boolean enabled)
+	public JPreviousIcon(final int width, final int height, final boolean doubleArrow, final boolean enabled)
 	{
 		setDimension(width, height);
 		this.doubleArrow = doubleArrow;
@@ -70,7 +70,7 @@ public class JPreviousIcon implements Icon
 	}
 
 	@Override
-	public void paintIcon(Component c, Graphics g, int x, int y)
+	public void paintIcon(final Component c, final Graphics g, final int x, final int y)
 	{
 		if (enabled)
 		{
@@ -120,13 +120,13 @@ public class JPreviousIcon implements Icon
 		}
 	}
 
-	public void setDimension(int width, int height)
+	public void setDimension(final int width, final int height)
 	{
 		this.width = width;
 		this.height = height;
 	}
 
-	public void setDoubleArrow(boolean doubleArrow)
+	public void setDoubleArrow(final boolean doubleArrow)
 	{
 		this.doubleArrow = doubleArrow;
 	}

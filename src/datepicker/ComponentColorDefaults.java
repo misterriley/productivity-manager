@@ -1,24 +1,24 @@
 /**
- Copyright 2004 Juan Heyns. All rights reserved.
- Redistribution and use in source and binary forms, with or without modification, are
- permitted provided that the following conditions are met:
- 1. Redistributions of source code must retain the above copyright notice, this list of
- conditions and the following disclaimer.
- 2. Redistributions in binary form must reproduce the above copyright notice, this list
- of conditions and the following disclaimer in the documentation and/or other materials
- provided with the distribution.
- THIS SOFTWARE IS PROVIDED BY JUAN HEYNS ``AS IS'' AND ANY EXPRESS OR IMPLIED
- WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL JUAN HEYNS OR
- CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
- ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- The views and conclusions contained in the software and documentation are those of the
- authors and should not be interpreted as representing official policies, either expressed
- or implied, of Juan Heyns.
+ * Copyright 2004 Juan Heyns. All rights reserved. Redistribution and use in
+ * source and binary forms, with or without modification, are permitted provided
+ * that the following conditions are met: 1. Redistributions of source code must
+ * retain the above copyright notice, this list of conditions and the following
+ * disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution. THIS
+ * SOFTWARE IS PROVIDED BY JUAN HEYNS ``AS IS'' AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL JUAN HEYNS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. The views and conclusions
+ * contained in the software and documentation are those of the authors and
+ * should not be interpreted as representing official policies, either expressed
+ * or implied, of Juan Heyns.
  */
 package datepicker;
 
@@ -32,7 +32,23 @@ public final class ComponentColorDefaults
 
 	public enum Key
 	{
-		FG_MONTH_SELECTOR, BG_MONTH_SELECTOR, FG_GRID_HEADER, BG_GRID_HEADER, FG_GRID_THIS_MONTH, FG_GRID_OTHER_MONTH, FG_GRID_TODAY, BG_GRID, BG_GRID_NOT_SELECTABLE, FG_GRID_SELECTED, BG_GRID_SELECTED, FG_GRID_TODAY_SELECTED, BG_GRID_TODAY_SELECTED, FG_TODAY_SELECTOR_ENABLED, FG_TODAY_SELECTOR_DISABLED, BG_TODAY_SELECTOR, POPUP_BORDER;
+		FG_MONTH_SELECTOR,
+		BG_MONTH_SELECTOR,
+		FG_GRID_HEADER,
+		BG_GRID_HEADER,
+		FG_GRID_THIS_MONTH,
+		FG_GRID_OTHER_MONTH,
+		FG_GRID_TODAY,
+		BG_GRID,
+		BG_GRID_NOT_SELECTABLE,
+		FG_GRID_SELECTED,
+		BG_GRID_SELECTED,
+		FG_GRID_TODAY_SELECTED,
+		BG_GRID_TODAY_SELECTED,
+		FG_TODAY_SELECTOR_ENABLED,
+		FG_TODAY_SELECTOR_DISABLED,
+		BG_TODAY_SELECTOR,
+		POPUP_BORDER;
 	}
 
 	private static ComponentColorDefaults instance;
@@ -77,12 +93,12 @@ public final class ComponentColorDefaults
 		colors.put(Key.POPUP_BORDER, Color.BLACK);
 	}
 
-	public Color getColor(Key key)
+	public Color getColor(final Key key)
 	{
 		return colors.get(key);
 	}
 
-	public void setColor(Key key, Color color)
+	public void setColor(final Key key, final Color color)
 	{
 		colors.put(key, color);
 	}

@@ -57,12 +57,12 @@ public final class ComponentFormatDefaults
 		formats.put(Key.SELECTED_DATE_FIELD, DateFormat.getDateInstance(DateFormat.MEDIUM));
 	}
 
-	public DateFormat getFormat(Key key)
+	public DateFormat getFormat(final Key key)
 	{
 		return formats.get(key);
 	}
 
-	public void setFormat(Key key, DateFormat format)
+	public void setFormat(final Key key, final DateFormat format)
 	{
 		formats.put(key, format);
 	}

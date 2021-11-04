@@ -1,24 +1,24 @@
 /**
- Copyright 2004 Juan Heyns. All rights reserved.
- Redistribution and use in source and binary forms, with or without modification, are
- permitted provided that the following conditions are met:
- 1. Redistributions of source code must retain the above copyright notice, this list of
- conditions and the following disclaimer.
- 2. Redistributions in binary form must reproduce the above copyright notice, this list
- of conditions and the following disclaimer in the documentation and/or other materials
- provided with the distribution.
- THIS SOFTWARE IS PROVIDED BY JUAN HEYNS ``AS IS'' AND ANY EXPRESS OR IMPLIED
- WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL JUAN HEYNS OR
- CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
- ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- The views and conclusions contained in the software and documentation are those of the
- authors and should not be interpreted as representing official policies, either expressed
- or implied, of Juan Heyns.
+ * Copyright 2004 Juan Heyns. All rights reserved. Redistribution and use in
+ * source and binary forms, with or without modification, are permitted provided
+ * that the following conditions are met: 1. Redistributions of source code must
+ * retain the above copyright notice, this list of conditions and the following
+ * disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution. THIS
+ * SOFTWARE IS PROVIDED BY JUAN HEYNS ``AS IS'' AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL JUAN HEYNS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. The views and conclusions
+ * contained in the software and documentation are those of the authors and
+ * should not be interpreted as representing official policies, either expressed
+ * or implied, of Juan Heyns.
  */
 package datepicker;
 
@@ -34,23 +34,23 @@ import javax.swing.event.ChangeListener;
 /**
  * Created 18 April 2010 Updated 26 April 2010
  *
- * @param <T>
- *            The type of this model (e.g. java.util.Date, java.util.Calendar)
- * @author Juan Heyns
+ * @param  <T> The type of this model (e.g. java.util.Date, java.util.Calendar)
+ *
+ * @author     Juan Heyns
  */
 public abstract class AbstractDateModel<T> implements DateModel<T>
 {
 
-	public static final String PROPERTY_YEAR = Messages.getString("AbstractDateModel.0"); //$NON-NLS-1$
-	public static final String PROPERTY_MONTH = Messages.getString("AbstractDateModel.1"); //$NON-NLS-1$
-	public static final String PROPERTY_DAY = Messages.getString("AbstractDateModel.2"); //$NON-NLS-1$
-	public static final String PROPERTY_VALUE = Messages.getString("AbstractDateModel.3"); //$NON-NLS-1$
-	public static final String PROPERTY_SELECTED = Messages.getString("AbstractDateModel.4"); //$NON-NLS-1$
+	public static final String	PROPERTY_YEAR		= Messages.getString("AbstractDateModel.0"); //$NON-NLS-1$
+	public static final String	PROPERTY_MONTH		= Messages.getString("AbstractDateModel.1"); //$NON-NLS-1$
+	public static final String	PROPERTY_DAY		= Messages.getString("AbstractDateModel.2"); //$NON-NLS-1$
+	public static final String	PROPERTY_VALUE		= Messages.getString("AbstractDateModel.3"); //$NON-NLS-1$
+	public static final String	PROPERTY_SELECTED	= Messages.getString("AbstractDateModel.4"); //$NON-NLS-1$
 
-	private boolean selected;
-	private Calendar calendarValue;
-	private final Set<ChangeListener> changeListeners;
-	private final Set<PropertyChangeListener> propertyChangeListeners;
+	private boolean								selected;
+	private Calendar							calendarValue;
+	private final Set<ChangeListener>			changeListeners;
+	private final Set<PropertyChangeListener>	propertyChangeListeners;
 
 	protected AbstractDateModel()
 	{
@@ -61,13 +61,13 @@ public abstract class AbstractDateModel<T> implements DateModel<T>
 	}
 
 	@Override
-	public synchronized void addChangeListener(ChangeListener changeListener)
+	public synchronized void addChangeListener(final ChangeListener changeListener)
 	{
 		changeListeners.add(changeListener);
 	}
 
 	@Override
-	public void addDay(int add)
+	public void addDay(final int add)
 	{
 		final int oldDayValue = this.calendarValue.get(Calendar.DATE);
 		final T oldValue = getValue();
@@ -78,7 +78,7 @@ public abstract class AbstractDateModel<T> implements DateModel<T>
 	}
 
 	@Override
-	public void addMonth(int add)
+	public void addMonth(final int add)
 	{
 		final int oldMonthValue = this.calendarValue.get(Calendar.MONTH);
 		final T oldValue = getValue();
@@ -89,13 +89,13 @@ public abstract class AbstractDateModel<T> implements DateModel<T>
 	}
 
 	@Override
-	public synchronized void addPropertyChangeListener(PropertyChangeListener listener)
+	public synchronized void addPropertyChangeListener(final PropertyChangeListener listener)
 	{
 		propertyChangeListeners.add(listener);
 	}
 
 	@Override
-	public void addYear(int add)
+	public void addYear(final int add)
 	{
 		final int oldYearValue = this.calendarValue.get(Calendar.YEAR);
 		final T oldValue = getValue();
@@ -104,29 +104,6 @@ public abstract class AbstractDateModel<T> implements DateModel<T>
 		firePropertyChange(PROPERTY_YEAR, oldYearValue, this.calendarValue.get(Calendar.YEAR));
 		firePropertyChange(PROPERTY_VALUE, oldValue, getValue());
 	}
-
-	protected synchronized void fireChangeEvent()
-	{
-		for (final ChangeListener changeListener : changeListeners)
-		{
-			changeListener.stateChanged(new ChangeEvent(this));
-		}
-	}
-
-	protected synchronized void firePropertyChange(String propertyName, Object oldValue, Object newValue)
-	{
-		if (oldValue != null && newValue != null && oldValue.equals(newValue))
-		{
-			return;
-		}
-
-		for (final PropertyChangeListener listener : propertyChangeListeners)
-		{
-			listener.propertyChange(new PropertyChangeEvent(this, propertyName, oldValue, newValue));
-		}
-	}
-
-	protected abstract T fromCalendar(Calendar from);
 
 	@Override
 	public int getDay()
@@ -163,19 +140,19 @@ public abstract class AbstractDateModel<T> implements DateModel<T>
 	}
 
 	@Override
-	public synchronized void removeChangeListener(ChangeListener changeListener)
+	public synchronized void removeChangeListener(final ChangeListener changeListener)
 	{
 		changeListeners.remove(changeListener);
 	}
 
 	@Override
-	public synchronized void removePropertyChangeListener(PropertyChangeListener listener)
+	public synchronized void removePropertyChangeListener(final PropertyChangeListener listener)
 	{
 		propertyChangeListeners.remove(listener);
 	}
 
 	@Override
-	public void setDateButWrong(int year, int month, int day)
+	public void setDateButWrong(final int year, final int month, final int day)
 	{
 		final int oldYearValue = this.calendarValue.get(Calendar.YEAR);
 		final int oldMonthValue = this.calendarValue.get(Calendar.MONTH);
@@ -190,7 +167,7 @@ public abstract class AbstractDateModel<T> implements DateModel<T>
 	}
 
 	@Override
-	public void setDay(int day)
+	public void setDay(final int day)
 	{
 		final int oldDayValue = this.calendarValue.get(Calendar.DATE);
 		final T oldValue = getValue();
@@ -201,7 +178,7 @@ public abstract class AbstractDateModel<T> implements DateModel<T>
 	}
 
 	@Override
-	public void setMonthButWrong(int month)
+	public void setMonthButWrong(final int month)
 	{
 		final int oldYearValue = this.calendarValue.get(Calendar.YEAR);
 		final int oldMonthValue = this.calendarValue.get(Calendar.MONTH);
@@ -236,7 +213,7 @@ public abstract class AbstractDateModel<T> implements DateModel<T>
 	}
 
 	@Override
-	public void setSelected(boolean selected)
+	public void setSelected(final boolean selected)
 	{
 		final T oldValue = getValue();
 		final boolean oldSelectedValue = isSelected();
@@ -246,16 +223,8 @@ public abstract class AbstractDateModel<T> implements DateModel<T>
 		firePropertyChange(PROPERTY_SELECTED, oldSelectedValue, this.selected);
 	}
 
-	private void setToMidnight()
-	{
-		calendarValue.set(Calendar.HOUR, 0);
-		calendarValue.set(Calendar.MINUTE, 0);
-		calendarValue.set(Calendar.SECOND, 0);
-		calendarValue.set(Calendar.MILLISECOND, 0);
-	}
-
 	@Override
-	public void setValue(T value)
+	public void setValue(final T value)
 	{
 		final int oldYearValue = this.calendarValue.get(Calendar.YEAR);
 		final int oldMonthValue = this.calendarValue.get(Calendar.MONTH);
@@ -283,7 +252,7 @@ public abstract class AbstractDateModel<T> implements DateModel<T>
 	}
 
 	@Override
-	public void setYear(int year)
+	public void setYear(final int year)
 	{
 		final int oldYearValue = this.calendarValue.get(Calendar.YEAR);
 		final int oldMonthValue = this.calendarValue.get(Calendar.MONTH);
@@ -317,6 +286,40 @@ public abstract class AbstractDateModel<T> implements DateModel<T>
 		firePropertyChange(PROPERTY_VALUE, oldValue, getValue());
 	}
 
+	protected synchronized void fireChangeEvent()
+	{
+		for (final ChangeListener changeListener : changeListeners)
+		{
+			changeListener.stateChanged(new ChangeEvent(this));
+		}
+	}
+
+	protected synchronized void firePropertyChange(
+		final String propertyName,
+		final Object oldValue,
+		final Object newValue)
+	{
+		if (oldValue != null && newValue != null && oldValue.equals(newValue))
+		{
+			return;
+		}
+
+		for (final PropertyChangeListener listener : propertyChangeListeners)
+		{
+			listener.propertyChange(new PropertyChangeEvent(this, propertyName, oldValue, newValue));
+		}
+	}
+
+	protected abstract T fromCalendar(Calendar from);
+
 	protected abstract Calendar toCalendar(T from);
+
+	private void setToMidnight()
+	{
+		calendarValue.set(Calendar.HOUR, 0);
+		calendarValue.set(Calendar.MINUTE, 0);
+		calendarValue.set(Calendar.SECOND, 0);
+		calendarValue.set(Calendar.MILLISECOND, 0);
+	}
 
 }
